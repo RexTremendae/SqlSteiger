@@ -1,5 +1,3 @@
-using Microsoft.Data.SqlClient;
-
 namespace SqlDataExtractor
 {
     using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
@@ -7,9 +5,9 @@ namespace SqlDataExtractor
 
     public class DatabaseStructureExtractor
     {
-        private readonly SqlConnection _connection;
+        private readonly IDbConnection _connection;
 
-        public DatabaseStructureExtractor(SqlConnection connection)
+        public DatabaseStructureExtractor(IDbConnection connection)
         {
             _connection = connection;
         }
@@ -17,9 +15,8 @@ namespace SqlDataExtractor
         public async Task<TableMetadataMap> ExtractTableMap()
         {
             var tables = new Dictionary<string, List<DatabaseColumnMetadata>>();
-            using var command = _connection.CreateCommand();
-            command.CommandText = TableColumnsQuery;
-            using var reader = await command.ExecuteReaderAsync();
+            await using var command = _connection.CreateCommand(TableColumnsQuery);
+            await using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {
@@ -55,9 +52,8 @@ namespace SqlDataExtractor
         public async Task<ForeignKeyMap> ExtractForeignKeyMap()
         {
             var foreignKeyMap = new ForeignKeyMap();
-            using var command = _connection.CreateCommand();
-            command.CommandText = ForeignKeyQuery;
-            using var reader = await command.ExecuteReaderAsync();
+            await using var command = _connection.CreateCommand(ForeignKeyQuery);
+            await using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
             {

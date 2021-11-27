@@ -1,10 +1,8 @@
-using Microsoft.Data.SqlClient;
-
 namespace SqlDataExtractor
 {
-    public static class SqlDataReaderExtensions
+    public static class DbDataReaderExtensions
     {
-        public static object? GetValue(this SqlDataReader reader, string columnName, Type csharpDataType)
+        public static object? GetValue(this IDbDataReader reader, string columnName, Type csharpDataType)
         {
             return csharpDataType switch
             {
@@ -24,7 +22,7 @@ namespace SqlDataExtractor
             };
         }
 
-        public static short? GetInt16(this SqlDataReader reader, string columnName)
+        public static short? GetInt16(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -34,7 +32,7 @@ namespace SqlDataExtractor
             return reader.GetInt16(ordinal);
         }
 
-        public static int? GetInt32(this SqlDataReader reader, string columnName)
+        public static int? GetInt32(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -44,7 +42,7 @@ namespace SqlDataExtractor
             return reader.GetInt32(ordinal);
         }
 
-        public static long? GetInt64(this SqlDataReader reader, string columnName)
+        public static long? GetInt64(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -54,7 +52,7 @@ namespace SqlDataExtractor
             return reader.GetInt64(ordinal);
         }
 
-        public static float? GetFloat(this SqlDataReader reader, string columnName)
+        public static float? GetFloat(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -64,7 +62,7 @@ namespace SqlDataExtractor
             return reader.GetFloat(ordinal);
         }
 
-        public static double? GetDouble(this SqlDataReader reader, string columnName)
+        public static double? GetDouble(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -74,7 +72,7 @@ namespace SqlDataExtractor
             return reader.GetDouble(ordinal);
         }
 
-        public static decimal? GetDecimal(this SqlDataReader reader, string columnName)
+        public static decimal? GetDecimal(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -84,7 +82,7 @@ namespace SqlDataExtractor
             return reader.GetDecimal(ordinal);
         }
 
-        public static string? GetString(this SqlDataReader reader, string columnName)
+        public static string? GetString(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -94,7 +92,7 @@ namespace SqlDataExtractor
             return reader.GetString(ordinal);
         }
 
-        public static bool? GetBoolean(this SqlDataReader reader, string columnName)
+        public static bool? GetBoolean(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -104,7 +102,7 @@ namespace SqlDataExtractor
             return reader.GetBoolean(ordinal);
         }
 
-        public static DateTime? GetDateTime(this SqlDataReader reader, string columnName)
+        public static DateTime? GetDateTime(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -114,7 +112,7 @@ namespace SqlDataExtractor
             return reader.GetDateTime(ordinal);
         }
 
-        public static DateTimeOffset? GetDateTimeOffset(this SqlDataReader reader, string columnName)
+        public static DateTimeOffset? GetDateTimeOffset(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -124,7 +122,7 @@ namespace SqlDataExtractor
             return reader.GetDateTimeOffset(ordinal);
         }
 
-        public static TimeSpan? GetTimeSpan(this SqlDataReader reader, string columnName)
+        public static TimeSpan? GetTimeSpan(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -134,7 +132,7 @@ namespace SqlDataExtractor
             return reader.GetTimeSpan(ordinal);
         }
 
-        public static Guid? GetGuid(this SqlDataReader reader, string columnName)
+        public static Guid? GetGuid(this IDbDataReader reader, string columnName)
         {
             if (!HasValue(reader, columnName, out var ordinal))
             {
@@ -144,7 +142,7 @@ namespace SqlDataExtractor
             return reader.GetGuid(ordinal);
         }
 
-        private static bool HasValue(SqlDataReader reader, string columnName, out int ordinal)
+        private static bool HasValue(IDbDataReader reader, string columnName, out int ordinal)
         {
             ordinal = reader.GetOrdinal(columnName);
             if (reader.IsDBNull(ordinal))

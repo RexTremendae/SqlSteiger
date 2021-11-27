@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using SqlDataExtractor;
+using SqlDataExtractor.SqlDatabase;
 using static System.Console;
 
 var connectionBuilder = new SqlConnectionStringBuilder();
@@ -13,7 +14,7 @@ connectionBuilder.InitialCatalog = "";
 // Seems to be needed when connecting to a local SQL Server instance running in docker
 connectionBuilder.TrustServerCertificate = true;
 
-var connection = new SqlConnection(connectionBuilder.ToString());
+await using IDbConnection connection = new SqlDbConnection(connectionBuilder.ToString());
 
 await connection.OpenAsync();
 var databaseStructureExtractor = new DatabaseStructureExtractor(connection);
@@ -47,9 +48,8 @@ foreach (var (_, tbl) in tables)
     var data = new List<string[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
     var maxSize = tbl.Columns.Select(c => c.Name.Length).ToArray();
 
-    var cmd = connection.CreateCommand();
-    cmd.CommandText = tbl.CreateSelectQuery();
-    using var reader = await cmd.ExecuteReaderAsync();
+    var cmd = connection.CreateCommand(tbl.CreateSelectQuery());
+    await using var reader = await cmd.ExecuteReaderAsync();
 
     while (await reader.ReadAsync())
     {
