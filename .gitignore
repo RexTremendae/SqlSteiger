@@ -1,0 +1,13 @@
+obj/
+bin/
+packages/
+.publish/
+App_Data/
+App_Start/
+Archive/
+.idea/
+.vs/
+*.suo
+*.DotSettings
+*.user
+*.min.css
