@@ -23,11 +23,13 @@ namespace SqlDataExtractor
                 var columnName = reader.GetString(ColumnName);
                 var sqlDataType = reader.GetString(SqlDataType);
                 var isNullable = reader.GetBoolean(IsNullable);
+                var isIdentity = reader.GetBoolean(IsIdentity);
 
                 if (tableName == null) throw new InvalidOperationException("TableName is null.");
                 if (columnName == null) throw new InvalidOperationException("ColumnName is null.");
                 if (sqlDataType == null) throw new InvalidOperationException("SqlDataType is null.");
                 if (isNullable == null) throw new InvalidOperationException("IsNullable is null.");
+                if (isIdentity == null) throw new InvalidOperationException("IsIdentity is null.");
 
                 if (!tables.TryGetValue(tableName, out var columnList))
                 {
@@ -39,7 +41,8 @@ namespace SqlDataExtractor
                     Name: columnName,
                     SqlDataType: sqlDataType,
                     CSharpDataType: sqlDataType.MapToCSharpType(),
-                    IsNullable: isNullable.Value
+                    IsNullable: isNullable.Value,
+                    IsIdentity: isIdentity.Value
                 ));
             }
 
@@ -77,13 +80,15 @@ namespace SqlDataExtractor
         private const string ReferencedColumnName = nameof(ReferencedColumnName);
         private const string SqlDataType = nameof(SqlDataType);
         private const string IsNullable = nameof(IsNullable);
+        private const string IsIdentity = nameof(IsIdentity);
 
         private const string TableColumnsQuery = @$"
 SELECT
     tbl.[name] AS {TableName},
     col.[name] AS {ColumnName},
     sqltype.[name] AS {SqlDataType},
-    col.[is_nullable] AS {IsNullable}
+    col.[is_nullable] AS {IsNullable},
+    col.[is_identity] AS {IsIdentity}
 FROM sys.columns col
 INNER JOIN sys.tables tbl
     ON tbl.object_id = col.object_id
