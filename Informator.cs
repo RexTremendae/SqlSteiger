@@ -40,9 +40,10 @@ namespace SqlDataExtractor
 
         public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables)
         {
+            const string NullMarker = "<NULL>";
             foreach (var tbl in tables)
             {
-                var data = new List<string[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
+                var data = new List<string?[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
                 var maxSize = tbl.Columns.Select(c => c.Name.Length).ToArray();
 
                 var cmd = connection.CreateCommand(tbl.CreateSelectQuery());
@@ -50,12 +51,12 @@ namespace SqlDataExtractor
 
                 while (await reader.ReadAsync())
                 {
-                    var dataRow = new List<string>();
+                    var dataRow = new List<string?>();
                     for (int i = 0; i < tbl.Columns.Length; i++)
                     {
                         var col = tbl.Columns[i];
-                        dataRow.Add(reader.GetValue(col.Name, col.CSharpDataType)?.ToString() ?? "<NULL>");
-                        maxSize[i] = Math.Max(maxSize[i], dataRow[i].Length);
+                        dataRow.Add(reader.GetValue(col.Name, col.CSharpDataType)?.ToString());
+                        maxSize[i] = Math.Max(maxSize[i], dataRow[i]?.Length ?? NullMarker.Length);
                     }
                     data.Add(dataRow.ToArray());
                 }
@@ -72,7 +73,11 @@ namespace SqlDataExtractor
                     ResetColor();
                     for (int i = 0; i < maxSize.Length; i ++)
                     {
-                        Write($" {row[i].PadRight(maxSize[i])} ");
+                        if (row[i] == null)
+                        {
+                            ForegroundColor = ConsoleColor.DarkGray;
+                        }
+                        Write($" {(row[i] ?? NullMarker).PadRight(maxSize[i])} ");
                         ForegroundColor = ConsoleColor.White;
                         Write("|");
                         ResetColor();
