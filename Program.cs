@@ -18,9 +18,31 @@ await using IDbConnection connection = new SqlDbConnection(connectionBuilder.ToS
 await connection.OpenAsync();
 var databaseStructureExtractor = new DatabaseStructureExtractor(connection);
 
-var tables = (await databaseStructureExtractor.ExtractTableMap()).Select(t => t.Value);
-var foreignKeys = await databaseStructureExtractor.ExtractForeignKeyMap();
+var tableMap = await databaseStructureExtractor.ExtractTableMapAsync();
+var tables = tableMap.Select(t => t.Value);
+var foreignKeyMap = await databaseStructureExtractor.ExtractForeignKeyMapAsync();
 
 Informator.PrintTables(tables);
-Informator.PrintRelations(foreignKeys);
+Informator.PrintRelations(foreignKeyMap);
+
 await Informator.PrintDataAsync(connection, tables);
+
+var crawler = new DependencyCrawler(foreignKeyMap, tableMap);
+var table = "";
+var keyColumn = "";
+var keyColumnValues = new object[] {};
+
+foreach (var t in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, table, keyColumn, keyColumnValues))
+{
+    var insertQuery = t.tableMetadata.CreateinsertQuery(t.dataRows);
+    Console.WriteLine(insertQuery.insert);
+    for (int i = 0; i < insertQuery.values.Length; i++)
+    {
+        var rowEnding = i == insertQuery.values.Length - 1
+            ? ';'
+            : ',';
+
+        Console.WriteLine(insertQuery.values[i] + rowEnding);
+    }
+    Console.WriteLine();
+}

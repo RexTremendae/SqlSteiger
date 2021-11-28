@@ -12,7 +12,7 @@ namespace SqlDataExtractor
             _connection = connection;
         }
 
-        public async Task<TableMetadataMap> ExtractTableMap()
+        public async Task<TableMetadataMap> ExtractTableMapAsync()
         {
             var tables = new Dictionary<string, List<DatabaseColumnMetadata>>();
             await using var command = _connection.CreateCommand(TableColumnsQuery);
@@ -49,7 +49,7 @@ namespace SqlDataExtractor
                 value => new DatabaseTableMetadata(Name: value.Key, Columns: value.Value.ToArray()));
         }
 
-        public async Task<ForeignKeyMap> ExtractForeignKeyMap()
+        public async Task<ForeignKeyMap> ExtractForeignKeyMapAsync()
         {
             var foreignKeyMap = new ForeignKeyMap();
             await using var command = _connection.CreateCommand(ForeignKeyQuery);

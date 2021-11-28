@@ -2,6 +2,11 @@ namespace SqlDataExtractor
 {
     public static class DbDataReaderExtensions
     {
+        public static object? GetValue(this IDbDataReader reader, DatabaseColumnMetadata columnMetadata)
+        {
+            return GetValue(reader, columnMetadata.Name, columnMetadata.CSharpDataType);
+        }
+
         public static object? GetValue(this IDbDataReader reader, string columnName, Type csharpDataType)
         {
             return csharpDataType switch

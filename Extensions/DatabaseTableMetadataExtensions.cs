@@ -24,7 +24,7 @@ FROM dbo.{tableMetadata.Name}
             return query;
         }
 
-        public static (string insert, string[] values) CreateinsertQueryAsync(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
+        public static (string insert, string[] values) CreateinsertQuery(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
         {
             var columnListing = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
             var queryInsert = $"INSERT INTO dbo.{tableMetadata.Name} ({columnListing}) VALUES";
