@@ -8,13 +8,18 @@ namespace SqlDataExtractor
     {
         private static ConsoleColor FrameColor = ConsoleColor.White;
 
-        public static void PrintTables(IEnumerable<DatabaseTableMetadata> tables)
+        public static void PrintTitle(string title)
         {
             ForegroundColor = FrameColor;
-            WriteLine("----------");
-            WriteLine("- Tables -");
-            WriteLine("----------");
+            WriteLine("".PadLeft(title.Length + 4, '-'));
+            WriteLine($"- {title} -");
+            WriteLine("".PadLeft(title.Length + 4, '-'));
             ResetColor();
+        }
+
+        public static void PrintTables(IEnumerable<DatabaseTableMetadata> tables)
+        {
+            PrintTitle("Tables");
             foreach (var tbl in tables)
             {
                 var columnListing = string.Join(", ",
@@ -27,10 +32,7 @@ namespace SqlDataExtractor
         public static void PrintRelations(ForeignKeyMap foreignKeys)
         {
             ForegroundColor = FrameColor;
-            WriteLine("-------------");
-            WriteLine("- Relations -");
-            WriteLine("-------------");
-            ResetColor();
+            PrintTitle("Relations");
             foreach (var (from, to) in foreignKeys)
             {
                 WriteLine($"{from.table}.{from.column} => {to.table}.{to.column}");

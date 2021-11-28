@@ -33,32 +33,8 @@ await Informator.PrintDataAsync(connection, tables);
 
 var crawler = new DependencyCrawler(foreignKeyMap, tableMap);
 
-foreach (var t in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, table, keyColumn, keyColumnValues))
+Informator.PrintTitle("Insert queries");
+foreach (var buildingBlocks in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, table, keyColumn, keyColumnValues))
 {
-    var identityColumns = t.tableMetadata.Columns
-        .Where(c => c.IsIdentity)
-        .Select(c => c.Name);
-
-    foreach (var col in identityColumns)
-    {
-        Console.WriteLine($"SET IDENTITY_INSERT {t.tableMetadata.Name} ON;");
-    }
-
-    var insertQuery = t.tableMetadata.CreateinsertQuery(t.dataRows);
-    Console.WriteLine(insertQuery.insert);
-    for (int i = 0; i < insertQuery.values.Length; i++)
-    {
-        var rowEnding = i == insertQuery.values.Length - 1
-            ? ';'
-            : ',';
-
-        Console.WriteLine(insertQuery.values[i] + rowEnding);
-    }
-
-    foreach (var col in identityColumns)
-    {
-        Console.WriteLine($"SET IDENTITY_INSERT {t.tableMetadata.Name} OFF;");
-    }
-
-    Console.WriteLine();
+    Console.WriteLine(buildingBlocks.CreateInsertQuery());
 }
