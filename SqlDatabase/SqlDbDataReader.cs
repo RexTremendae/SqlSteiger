@@ -2,11 +2,11 @@ using Microsoft.Data.SqlClient;
 
 namespace SqlDataExtractor.SqlDatabase
 {
-    public class SqlDbReader : IDbDataReader
+    public class SqlDbDataReader : IDbDataReader
     {
         private SqlDataReader _dbDataReader;
 
-        public SqlDbReader(SqlDataReader dbDataReader)
+        public SqlDbDataReader(SqlDataReader dbDataReader)
         {
             _dbDataReader = dbDataReader;
         }

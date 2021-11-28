@@ -40,7 +40,7 @@ namespace SqlDataExtractor
 
                 var data = new List<Dictionary<string, object?>>();
 
-                await using var reader = await connection.CreateCommand(selectQuery).ExecuteReaderAsync();
+                await using var reader = await connection.ExecuteReaderAsync(selectQuery);
 
                 while (await reader.ReadAsync())
                 {

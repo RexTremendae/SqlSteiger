@@ -3,6 +3,6 @@ namespace SqlDataExtractor
     public interface IDbConnection : IAsyncDisposable
     {
         Task OpenAsync();
-        IDbCommand CreateCommand(string commandText);
+        Task<IDbDataReader> ExecuteReaderAsync(string commandText);
     }
 }

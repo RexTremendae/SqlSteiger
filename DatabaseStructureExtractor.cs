@@ -15,8 +15,7 @@ namespace SqlDataExtractor
         public async Task<TableMetadataMap> ExtractTableMapAsync()
         {
             var tables = new Dictionary<string, List<DatabaseColumnMetadata>>();
-            await using var command = _connection.CreateCommand(TableColumnsQuery);
-            await using var reader = await command.ExecuteReaderAsync();
+            await using var reader = await _connection.ExecuteReaderAsync(TableColumnsQuery);
 
             while (await reader.ReadAsync())
             {
@@ -52,8 +51,7 @@ namespace SqlDataExtractor
         public async Task<ForeignKeyMap> ExtractForeignKeyMapAsync()
         {
             var foreignKeyMap = new ForeignKeyMap();
-            await using var command = _connection.CreateCommand(ForeignKeyQuery);
-            await using var reader = await command.ExecuteReaderAsync();
+            await using var reader = await _connection.ExecuteReaderAsync(ForeignKeyQuery);
 
             while (await reader.ReadAsync())
             {

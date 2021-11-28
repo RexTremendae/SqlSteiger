@@ -26,11 +26,11 @@ namespace SqlDataExtractor.SqlDatabase
             await _sqlConnection.DisposeAsync();
         }
 
-        public IDbCommand CreateCommand(string commandText)
+        public async Task<IDbDataReader> ExecuteReaderAsync(string commandText)
         {
-            var command = _sqlConnection.CreateCommand();
+            await using var command = _sqlConnection.CreateCommand();
             command.CommandText = commandText;
-            return new SqlDbCommand(command);
+            return new SqlDbDataReader(await command.ExecuteReaderAsync());
         }
     }
 }

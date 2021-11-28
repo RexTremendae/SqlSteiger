@@ -46,9 +46,7 @@ namespace SqlDataExtractor
                 var data = new List<string?[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
                 var maxSize = tbl.Columns.Select(c => c.Name.Length).ToArray();
 
-                var cmd = connection.CreateCommand(tbl.CreateSelectQuery());
-                await using var reader = await cmd.ExecuteReaderAsync();
-
+                await using var reader = await connection.ExecuteReaderAsync(tbl.CreateSelectQuery());
                 while (await reader.ReadAsync())
                 {
                     var dataRow = new List<string?>();
