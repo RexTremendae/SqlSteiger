@@ -11,20 +11,36 @@ public static class DatabaseTableMetadataExtensions
         var filterRow = "";
         if (keyColumn != null && (keyColumnFilter?.Any() ?? false))
         {
-            var filterList = string.Join(", ", keyColumnFilter.Select(f => f.ToQueryValue(f.GetType())));
+            var filterList = string.Join(", ", keyColumnFilter.Select(f => f.ToQueryValue()));
             filterRow = $"WHERE {keyColumn} IN ({filterList})";
         }
 
-        var query = $@"
-SELECT {columns}
-FROM dbo.{tableMetadata.Name}
-{filterRow}
-";
+        var queryLines = new List<string>(new[]
+        {
+            $"SELECT {columns}",
+            $"FROM dbo.{tableMetadata.Name}"
+        });
 
-        return query;
+        if (!string.IsNullOrEmpty(filterRow))
+        {
+            queryLines.Add(filterRow);
+        }
+
+        var queryBuilder = new StringBuilder();
+        for (int i = 0; i < queryLines.Count; i++)
+        {
+            var line = queryLines[i];
+            if (i == queryLines.Count - 1)
+            {
+                line += ";";
+            }
+            queryBuilder.AppendLine(line);
+        }
+
+        return queryBuilder.ToString();
     }
 
-    public static (string insert, string[] values) CreateinsertQuery(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
+    public static (string insert, string[] values) CreateInsertQueryParts(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
     {
         var columnListing = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
         var queryInsert = $"INSERT INTO dbo.{tableMetadata.Name} ({columnListing}) VALUES";
@@ -41,7 +57,7 @@ FROM dbo.{tableMetadata.Name}
                 else queryBuilder.Append(", ");
 
                 var value = rowData[column.Name];
-                queryBuilder.Append(value.ToQueryValue(column.CSharpDataType));
+                queryBuilder.Append(value.ToQueryValue());
             }
             queryBuilder.Append(')');
             queryValues.Add(queryBuilder.ToString());

@@ -18,16 +18,16 @@ public static class InsertQueryBuildingBlocksExtensions
             queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} ON;");
         }
 
-        var insertQuery = tableMetadata.CreateinsertQuery(buildingBlocks.dataRows);
+        var (insert, values) = tableMetadata.CreateInsertQueryParts(buildingBlocks.dataRows);
 
-        queryBuilder.AppendLine(insertQuery.insert);
-        for (int i = 0; i < insertQuery.values.Length; i++)
+        queryBuilder.AppendLine(insert);
+        for (int i = 0; i < values.Length; i++)
         {
-            var rowEnding = i == insertQuery.values.Length - 1
+            var rowEnding = i == values.Length - 1
                 ? ';'
                 : ',';
 
-            queryBuilder.AppendLine(insertQuery.values[i] + rowEnding);
+            queryBuilder.AppendLine(values[i] + rowEnding);
         }
 
         foreach (var col in identityColumns)
