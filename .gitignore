@@ -11,3 +11,4 @@ Archive/
 *.DotSettings
 *.user
 *.min.css
+*ncrunch*

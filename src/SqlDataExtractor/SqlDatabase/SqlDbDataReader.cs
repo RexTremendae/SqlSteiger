@@ -4,16 +4,16 @@ namespace SqlDataExtractor.SqlDatabase;
 
 public class SqlDbDataReader : IDbDataReader
 {
-    private SqlDataReader _dbDataReader;
+    private readonly SqlDataReader _dbDataReader;
 
     public SqlDbDataReader(SqlDataReader dbDataReader)
     {
         _dbDataReader = dbDataReader;
     }
 
-    public bool IsDBNull(int ordinal)
+    public bool IsDBNull(string columnName)
     {
-        return _dbDataReader.IsDBNull(ordinal);
+        return _dbDataReader.IsDBNull(GetOrdinal(columnName));
     }
 
     public async Task<bool> ReadAsync()
@@ -21,67 +21,163 @@ public class SqlDbDataReader : IDbDataReader
         return await _dbDataReader.ReadAsync();
     }
 
-    public short GetInt16(int ordinal)
+    public object? GetValue(DatabaseColumnMetadata columnMetadata)
     {
+        return GetValue(columnMetadata.Name, columnMetadata.CSharpDataType);
+    }
+
+    public object? GetValue(string columnName, Type csharpDataType)
+    {
+        return csharpDataType switch
+        {
+            var t when t == typeof(short)           => GetInt16(columnName),
+            var t when t == typeof(int)             => GetInt32(columnName),
+            var t when t == typeof(long)            => GetInt64(columnName),
+            var t when t == typeof(float)           => GetFloat(columnName),
+            var t when t == typeof(double)          => GetDouble(columnName),
+            var t when t == typeof(decimal)         => GetDecimal(columnName),
+            var t when t == typeof(string)          => GetString(columnName),
+            var t when t == typeof(bool)            => GetBoolean(columnName),
+            var t when t == typeof(DateTime)        => GetDateTime(columnName),
+            var t when t == typeof(DateTimeOffset)  => GetDateTimeOffset(columnName),
+            var t when t == typeof(TimeSpan)        => GetTimeSpan(columnName),
+            var t when t == typeof(Guid)            => GetGuid(columnName),
+            _ => throw new InvalidOperationException($"No definition for how to read type {csharpDataType.Name}")
+        };
+    }
+
+    public short? GetInt16(string columnName)
+    {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetInt16(ordinal);
     }
 
-    public int GetInt32(int ordinal)
+    public int? GetInt32(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetInt32(ordinal);
     }
 
-    public long GetInt64(int ordinal)
+    public long? GetInt64(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetInt64(ordinal);
     }
 
-    public float GetFloat(int ordinal)
+    public float? GetFloat(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetFloat(ordinal);
     }
 
-    public double GetDouble(int ordinal)
+    public double? GetDouble(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetDouble(ordinal);
     }
 
-    public decimal GetDecimal(int ordinal)
+    public decimal? GetDecimal(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetDecimal(ordinal);
     }
 
-    public bool GetBoolean(int ordinal)
+    public string? GetString(string columnName)
     {
-        return _dbDataReader.GetBoolean(ordinal);
-    }
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
 
-    public string GetString(int ordinal)
-    {
         return _dbDataReader.GetString(ordinal);
     }
 
-    public DateTime GetDateTime(int ordinal)
+    public bool? GetBoolean(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
+        return _dbDataReader.GetBoolean(ordinal);
+    }
+
+    public DateTime? GetDateTime(string columnName)
+    {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetDateTime(ordinal);
     }
 
-    public DateTimeOffset GetDateTimeOffset(int ordinal)
+    public DateTimeOffset? GetDateTimeOffset(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetDateTimeOffset(ordinal);
     }
 
-    public TimeSpan GetTimeSpan(int ordinal)
+    public TimeSpan? GetTimeSpan(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetTimeSpan(ordinal);
     }
 
-    public Guid GetGuid(int ordinal)
+    public Guid? GetGuid(string columnName)
     {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
         return _dbDataReader.GetGuid(ordinal);
     }
 
-    public int GetOrdinal(string columnName)
+    private bool HasValue(string columnName, out int ordinal)
+    {
+        ordinal = GetOrdinal(columnName);
+        if (_dbDataReader.IsDBNull(ordinal))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private int GetOrdinal(string columnName)
     {
         return _dbDataReader.GetOrdinal(columnName);
     }
