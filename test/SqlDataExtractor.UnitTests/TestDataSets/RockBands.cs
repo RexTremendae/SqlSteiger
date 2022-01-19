@@ -1,0 +1,101 @@
+﻿namespace SqlDataExtractor.UnitTests.TestDataSets;
+
+public static class RockBands
+{
+    // ▛▀▀▀▀▀▀▀▀▜
+    // ▌ People ▐
+    // ▙▄▄▄▄▄▄▄▄▟
+    public const string PeopleTableName = "People";
+    public static readonly DatabaseTableMetadata PeopleTable = new(
+        Name: PeopleTableName,
+        Columns: new[]
+        {
+            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("FirstName",   "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("LastName",    "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false)
+        });
+
+    public static readonly object?[][] PeopleTableData = new object?[][]
+    {
+        new object?[] {  1, "John",   "Lennon"    },
+        new object?[] {  2, "Paul",   "McCartney" },
+        new object?[] {  3, "Ringo",  "Starr"     },
+        new object?[] {  4, "George", "Harrison"  },
+        new object?[] {  5, "James",  "Hetfield"  },
+        new object?[] {  6, "Lars",   "Ulrich"    },
+        new object?[] {  7, "Kirk",   "Hammet"    },
+        new object?[] {  8, "Cliff",  "Burton"    }
+    };
+
+
+    // ▛▀▀▀▀▀▀▀▜
+    // ▌ Bands ▐
+    // ▙▄▄▄▄▄▄▄▟
+    public const string BandsTableName = "Bands";
+    public static readonly DatabaseTableMetadata BandsTable = new(
+        Name: BandsTableName,
+        Columns: new[]
+        {
+            new DatabaseColumnMetadata("Id",        "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("Name",      "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("StartYear", "int",           typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("EndYear",   "int",           typeof(int),    IsNullable: true,  IsIdentity: false)
+        });
+
+    public static readonly object?[][] BandsTableData = new object?[][]
+    {
+        new object?[] {  1,  "the Beatles",  1960,  1970 },
+        new object?[] {  1,  "Metallica",    1981,  null }
+    };
+
+
+    // ▛▀▀▀▀▀▀▀▀▀▀▀▀▀▜
+    // ▌ BandMembers ▐
+    // ▙▄▄▄▄▄▄▄▄▄▄▄▄▄▟
+    public const string BandsMembersTableName = "BandMembers";
+    public static readonly DatabaseTableMetadata BandsMembersTable = new(
+        Name: BandsMembersTableName,
+        Columns: new[]
+        {
+            new DatabaseColumnMetadata("BandId",        "int",     typeof(int), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("PersonId",      "int",     typeof(int), IsNullable: false, IsIdentity: false)
+        });
+
+    public static readonly object?[][] BandsMembersTableData = new object?[][]
+    {
+        new object?[] { 1, 1 },
+        new object?[] { 1, 2 },
+        new object?[] { 1, 3 },
+        new object?[] { 1, 4 },
+        new object?[] { 2, 5 },
+        new object?[] { 2, 6 },
+        new object?[] { 2, 7 },
+        new object?[] { 2, 8 }
+    };
+
+
+    // ▛▀▀▀▀▀▀▀▀▜
+    // ▌ Albums ▐
+    // ▙▄▄▄▄▄▄▄▄▟
+    public const string AlbumsTableName = "Albums";
+    public static readonly DatabaseTableMetadata AlbumsTable = new(
+        Name: AlbumsTableName,
+        Columns: new[]
+        {
+            new DatabaseColumnMetadata("Id",        "int",               typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("BandId",    "int",               typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("Name",      "nvarchar(100)",     typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("Year",      "int",               typeof(int),    IsNullable: false, IsIdentity: false)
+        });
+
+    public static readonly object?[][] AlbumsTableData = new object?[][]
+    {
+        new object?[] { 1, 1, "Revolver",                              1966 },
+        new object?[] { 2, 1, "Sgt. Pepper's Lonely Hearts Club Band", 1967 },
+        new object?[] { 3, 1, "Abbey Road",                            1969 },
+        new object?[] { 4, 2, "Kill 'em All",                          1983 },
+        new object?[] { 4, 2, "Ride the Lightning",                    1984 },
+        new object?[] { 4, 2, "Master of Puppets",                     1986 }
+    };
+}
+

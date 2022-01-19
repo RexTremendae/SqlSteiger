@@ -2,16 +2,19 @@
 
 public static class Presidents
 {
+    // ▛▀▀▀▀▀▀▀▀▜
+    // ▌ People ▐
+    // ▙▄▄▄▄▄▄▄▄▟
     public const string PeopleTableName = "People";
     public static readonly DatabaseTableMetadata PeopleTable = new(
         Name: PeopleTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true),
+            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
             new DatabaseColumnMetadata("FirstName",   "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
             new DatabaseColumnMetadata("LastName",    "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfBirth", "int",           typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfDeath", "int",           typeof(string), IsNullable: true,  IsIdentity: false),
+            new DatabaseColumnMetadata("YearOfBirth", "int",           typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("YearOfDeath", "int",           typeof(int),    IsNullable: true,  IsIdentity: false),
             new DatabaseColumnMetadata("BirthState",  "int",           typeof(int),    IsNullable: false, IsIdentity: false),
         });
 
@@ -29,15 +32,19 @@ public static class Presidents
         new object?[] { 10, "Franklin D.", "Roosevelt",    1901, 1909, 6 }
     };
 
+
+    // ▛▀▀▀▀▀▀▀▀▀▀▀▀▜
+    // ▌ Precidency ▐
+    // ▙▄▄▄▄▄▄▄▄▄▄▄▄▟
     public const string PrecidencyTableName = "Precidency";
     public static readonly DatabaseTableMetadata PrecidencyTable = new(
         Name: PrecidencyTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",        "int", typeof(int),    IsNullable: false, IsIdentity: true),
+            new DatabaseColumnMetadata("Id",        "int", typeof(int),    IsNullable: false, IsIdentity: true ),
             new DatabaseColumnMetadata("PersonId",  "int", typeof(int),    IsNullable: false, IsIdentity: false),
             new DatabaseColumnMetadata("StartYear", "int", typeof(int),    IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("EndYear",   "int", typeof(string), IsNullable: true,  IsIdentity: false)
+            new DatabaseColumnMetadata("EndYear",   "int", typeof(int),    IsNullable: true,  IsIdentity: false)
         });
 
     public static readonly object?[][] PrecidencyTableData = new object?[][]
@@ -54,14 +61,18 @@ public static class Presidents
         new object?[] { 31, 10, 1933, 1945 }
     };
 
+
+    // ▛▀▀▀▀▀▀▀▀▜
+    // ▌ States ▐
+    // ▙▄▄▄▄▄▄▄▄▟
     public const string StatesTableName = "States";
     public static readonly DatabaseTableMetadata StatesTable = new(
         Name: StatesTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true),
+            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
             new DatabaseColumnMetadata("Name",        "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfUnion", "int",           typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("YearOfUnion", "int",           typeof(int),    IsNullable: false, IsIdentity: false)
         });
 
     public static readonly object?[][] StatesTableData = new object?[][]
