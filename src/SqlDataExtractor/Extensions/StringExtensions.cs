@@ -22,13 +22,16 @@ public static class StringExtensions
             "numeric"          => typeof(decimal),
             "nvarchar"         => typeof(string),
             "real"             => typeof(float),
+            "rowversion"       => typeof(IgnoredDataType),
             "smalldatetime"    => typeof(DateTime),
             "smallint"         => typeof(short),
             "smallmoney"       => typeof(decimal),
             "sysname"          => typeof(string),
             "text"             => typeof(string),
             "time"             => typeof(TimeSpan),
+            "timestamp"        => typeof(IgnoredDataType),
             "uniqueidentifier" => typeof(Guid),
+            "varbinary"        => typeof(byte[]),
             "varchar"          => typeof(string),
 
             _ => throw new InvalidOperationException($"No mapping defined for SQL type {sqlDataType}.")

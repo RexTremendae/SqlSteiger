@@ -37,6 +37,7 @@ public static class ObjectExtensions
             var t when t == typeof(float)   => ((float)value).ToString(CultureInfo.InvariantCulture),
             var t when t == typeof(double)  => ((double)value).ToString(CultureInfo.InvariantCulture),
             var t when t == typeof(decimal) => ((decimal)value).ToString(CultureInfo.InvariantCulture),
+            var t when t == typeof(byte[])  => ((byte[])value).ToStringRepresentation(),
             _ => value.ToString()
         };
 

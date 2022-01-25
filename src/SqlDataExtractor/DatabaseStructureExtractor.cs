@@ -37,10 +37,16 @@ public class DatabaseStructureExtractor
                 tables.Add(tableName, columnList);
             }
 
+            var csDataType = sqlDataType.MapToCSharpType();
+            if (csDataType == typeof(IgnoredDataType))
+            {
+                continue;
+            }
+
             columnList.Add(new DatabaseColumnMetadata(
                 Name: columnName,
                 SqlDataType: sqlDataType,
-                CSharpDataType: sqlDataType.MapToCSharpType(),
+                CSharpDataType: csDataType,
                 IsNullable: isNullable.Value,
                 IsIdentity: isIdentity.Value
             ));
