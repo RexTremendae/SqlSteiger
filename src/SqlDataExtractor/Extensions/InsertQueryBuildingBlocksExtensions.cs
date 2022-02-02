@@ -4,37 +4,54 @@ namespace SqlDataExtractor;
 
 public static class InsertQueryBuildingBlocksExtensions
 {
-    public static string CreateInsertQuery(this InsertQueryBuildingBlocks buildingBlocks)
+    public static IEnumerable<string> CreateInsertQuery(this InsertQueryBuildingBlocks buildingBlocks)
     {
-        var queryBuilder = new StringBuilder();
+        var defaultConfiguration = new InsertQueryConfiguration
+        (
+            MaxRowBatchSize: 1000
+        );
 
-        var tableMetadata = buildingBlocks.tableMetadata;
+        return CreateInsertQuery(buildingBlocks, defaultConfiguration);
+    }
+
+    public static IEnumerable<string> CreateInsertQuery(this InsertQueryBuildingBlocks buildingBlocks, InsertQueryConfiguration configuration)
+    {
+        var tableMetadata = buildingBlocks.TableMetadata;
         var identityColumns = tableMetadata.Columns
             .Where(c => c.IsIdentity)
             .Select(c => c.Name);
 
-        foreach (var col in identityColumns)
+        var (insert, values) = tableMetadata.CreateInsertQueryParts(buildingBlocks.DataRows);
+
+        var totalRows = 0;
+        while (totalRows < values.Length)
         {
-            queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} ON;");
+            var queryBuilder = new StringBuilder();
+            foreach (var col in identityColumns)
+            {
+                queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} ON;");
+            }
+
+            queryBuilder.AppendLine(insert);
+            var isLastRow = false;
+            for (int i = 0; !isLastRow; i++)
+            {
+                isLastRow = i >= configuration.MaxRowBatchSize - 1 || totalRows + i >= values.Length - 1;
+                var rowEnding = isLastRow
+                    ? ';'
+                    : ',';
+
+                queryBuilder.AppendLine(values[totalRows + i] + rowEnding);
+            }
+            totalRows += configuration.MaxRowBatchSize;
+
+            foreach (var col in identityColumns)
+            {
+                queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} OFF;");
+            }
+
+            queryBuilder.AppendLine("GO");
+            yield return queryBuilder.ToString();
         }
-
-        var (insert, values) = tableMetadata.CreateInsertQueryParts(buildingBlocks.dataRows);
-
-        queryBuilder.AppendLine(insert);
-        for (int i = 0; i < values.Length; i++)
-        {
-            var rowEnding = i == values.Length - 1
-                ? ';'
-                : ',';
-
-            queryBuilder.AppendLine(values[i] + rowEnding);
-        }
-
-        foreach (var col in identityColumns)
-        {
-            queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} OFF;");
-        }
-
-        return queryBuilder.ToString();
     }
 }

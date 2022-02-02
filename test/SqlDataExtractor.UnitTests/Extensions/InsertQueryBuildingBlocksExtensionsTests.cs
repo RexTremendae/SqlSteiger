@@ -14,10 +14,12 @@ public class InsertQueryBuildingBlocksExtensionsTests
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
         // Act
-        var query = InsertQueryBuildingBlocksExtensions.CreateInsertQuery(buildingBlocks);
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks)
+            .ToArray();
 
         // Assert
-        query.Should().Be(NewLine);
+        query.Length.Should().Be(0);
     }
 
     [Fact]
@@ -45,13 +47,17 @@ public class InsertQueryBuildingBlocksExtensionsTests
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
         // Act
-        var query = InsertQueryBuildingBlocksExtensions.CreateInsertQuery(buildingBlocks);
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks)
+            .ToArray();
 
         // Assert
-        query.Should().Be(
+        query.Length.Should().Be(1);
+        query.First().Should().Be(
             $"INSERT INTO dbo.Table ([IntColumn], [TextColumn]) VALUES{NewLine}" +
             $"(1, 'Txt'),{NewLine}" +
-            $"(2, NULL);{NewLine}"
+            $"(2, NULL);{NewLine}" +
+            $"GO{NewLine}"
         );
     }
 
@@ -77,15 +83,163 @@ public class InsertQueryBuildingBlocksExtensionsTests
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
         // Act
-        var query = InsertQueryBuildingBlocksExtensions.CreateInsertQuery(buildingBlocks);
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks)
+            .ToArray();
 
         // Assert
-        query.Should().Be(
+        query.Length.Should().Be(1);
+        query.First().Should().Be(
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(1),{NewLine}" +
             $"(2);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}"
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+    }
+
+    [Fact]
+    public void CreateInsertQuery_MaxOneRowPerBatch()
+    {
+        // Arrange
+        var columnMetadata = new[]
+        {
+            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+        };
+
+        var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
+        var dataRows = new Dictionary<string, object?>[]
+        {
+            new Dictionary<string, object?> {
+                { "Column", 1 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 2 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 3 }
+            }
+        };
+        var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
+
+        // Act
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks, new InsertQueryConfiguration(MaxRowBatchSize: 1))
+            .ToArray();
+
+        // Assert
+        query.Length.Should().Be(3);
+        query.First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(1);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+        query.Skip(1).First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(2);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+        query.Skip(2).First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(3);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+    }
+
+    [Fact]
+    public void CreateInsertQuery_MaxTwoRowsPerBatch()
+    {
+        // Arrange
+        var columnMetadata = new[]
+        {
+            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+        };
+
+        var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
+        var dataRows = new Dictionary<string, object?>[]
+        {
+            new Dictionary<string, object?> {
+                { "Column", 1 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 2 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 3 }
+            }
+        };
+        var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
+
+        // Act
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks, new InsertQueryConfiguration(MaxRowBatchSize: 2))
+            .ToArray();
+
+        // Assert
+        query.Length.Should().Be(2);
+        query.First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(1),{NewLine}" +
+            $"(2);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+        query.Skip(1).First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(3);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
+        );
+    }
+
+    [Fact]
+    public void CreateInsertQuery_MaxThreeRowsPerBatch()
+    {
+        // Arrange
+        var columnMetadata = new[]
+        {
+            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+        };
+
+        var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
+        var dataRows = new Dictionary<string, object?>[]
+        {
+            new Dictionary<string, object?> {
+                { "Column", 1 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 2 }
+            },
+            new Dictionary<string, object?> {
+                { "Column", 3 }
+            }
+        };
+        var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
+
+        // Act
+        var query = InsertQueryBuildingBlocksExtensions
+            .CreateInsertQuery(buildingBlocks, new InsertQueryConfiguration(MaxRowBatchSize: 3))
+            .ToArray();
+
+        // Assert
+        query.Length.Should().Be(1);
+        query.First().Should().Be(
+            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
+            $"(1),{NewLine}" +
+            $"(2),{NewLine}" +
+            $"(3);{NewLine}" +
+            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
+            $"GO{NewLine}"
         );
     }
 

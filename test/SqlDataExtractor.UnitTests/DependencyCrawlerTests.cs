@@ -37,7 +37,7 @@ public class DependencyCrawlerTests
         // Act
         var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
             (connectionMock, Presidents.PrecidencyTableName, "Id", new object[] { 1 }))
-            .Select(b => b.tableMetadata.Name)
+            .Select(b => b.TableMetadata.Name)
             .ToArray();
 
         // Assert
@@ -84,7 +84,7 @@ public class DependencyCrawlerTests
         // Act
         var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
             (connectionMock, RockBands.BandsTableName, "Id", new object[] { 1 }))
-            .Select(b => b.tableMetadata.Name)
+            .Select(b => b.TableMetadata.Name)
             .ToArray();
 
         // Assert

@@ -80,14 +80,14 @@ public class DependencyCrawler
         foreach (var insertQueryBlocks in insertQueryBuildingBlocks)
         {
             var childDependencies = _foreignKeys
-                .Where(fk => fk.Key.table == insertQueryBlocks.tableMetadata.Name)
+                .Where(fk => fk.Key.table == insertQueryBlocks.TableMetadata.Name)
                 .Select(fk => fk.Value.table)
                 .ToHashSet();
 
             var insertIdx = 0;
             for (int i = 0; i < sorted.Count; i++)
             {
-                if (childDependencies.Contains(sorted[i].tableMetadata.Name))
+                if (childDependencies.Contains(sorted[i].TableMetadata.Name))
                 {
                     insertIdx = i+1;
                 }
