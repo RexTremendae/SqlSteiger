@@ -7,27 +7,15 @@ namespace SqlDataExtractor.UnitTests;
 
 public class DependencyCrawlerTests
 {
-    [Theory]
-    [InlineData(0, 1, 2)]
-    [InlineData(0, 2, 1)]
-    [InlineData(1, 0, 2)]
-    [InlineData(1, 2, 0)]
-    [InlineData(2, 1, 0)]
-    [InlineData(2, 0, 1)]
-    public async Task InsertQueries_OrderedByDependency_PresidentsDataSet (int a, int b, int c)
+    [Fact]
+    public async Task InsertQueries_OrderedByDependency_PresidentsDataSet()
     {
         // Arrange
         var connectionMock = new DbConnectionMock();
-        var tables = new (DatabaseTableMetadata tableMetadata, IEnumerable<object?[]> dataRows)[]
-        {
-            (Presidents.PeopleTable, Presidents.PeopleTableData),
-            (Presidents.PrecidencyTable, Presidents.PrecidencyTableData),
-            (Presidents.StatesTable, Presidents.StatesTableData)
-        };
 
-        connectionMock.AddTable(tables[a].tableMetadata, tables[a].dataRows);
-        connectionMock.AddTable(tables[b].tableMetadata, tables[b].dataRows);
-        connectionMock.AddTable(tables[c].tableMetadata, tables[c].dataRows);
+        connectionMock.AddTable(Presidents.PeopleTable,     Presidents.PeopleTableData);
+        connectionMock.AddTable(Presidents.PrecidencyTable, Presidents.PrecidencyTableData);
+        connectionMock.AddTable(Presidents.StatesTable,     Presidents.StatesTableData);
 
         connectionMock.AddForeignKey((Presidents.PrecidencyTableName, "PersonId"), (Presidents.PeopleTableName, "Id"));
         connectionMock.AddForeignKey((Presidents.PeopleTableName, "BirthState"),   (Presidents.StatesTableName, "Id"));
@@ -47,33 +35,16 @@ public class DependencyCrawlerTests
         insertTables[2].Should().Be(Presidents.PrecidencyTableName);
     }
 
-    [Theory]
-    [InlineData(0, 1, 2, 3)]
-    [InlineData(0, 2, 1, 3)]
-    [InlineData(0, 3, 2, 1)]
-    [InlineData(1, 0, 2, 3)]
-    [InlineData(1, 2, 0, 3)]
-    [InlineData(2, 1, 0, 3)]
-    [InlineData(2, 0, 1, 3)]
-    [InlineData(3, 0, 1, 2)]
-    [InlineData(3, 1, 0, 2)]
-    [InlineData(3, 2, 1, 0)]
-    public async Task InsertQueries_OrderedByDependency_RockBandsDataSet (int a, int b, int c, int d)
+    [Fact]
+    public async Task InsertQueries_OrderedByDependency_RockBandsDataSet()
     {
         // Arrange
         var connectionMock = new DbConnectionMock();
-        var tables = new (DatabaseTableMetadata tableMetadata, IEnumerable<object?[]> dataRows)[]
-        {
-            (RockBands.PeopleTable,       RockBands.PeopleTableData),
-            (RockBands.BandsMembersTable, RockBands.BandsMembersTableData),
-            (RockBands.AlbumsTable,       RockBands.AlbumsTableData),
-            (RockBands.BandsTable,        RockBands.BandsTableData)
-        };
 
-        connectionMock.AddTable(tables[a].tableMetadata, tables[a].dataRows);
-        connectionMock.AddTable(tables[b].tableMetadata, tables[b].dataRows);
-        connectionMock.AddTable(tables[c].tableMetadata, tables[c].dataRows);
-        connectionMock.AddTable(tables[d].tableMetadata, tables[d].dataRows);
+        connectionMock.AddTable(RockBands.PeopleTable,       RockBands.PeopleTableData);
+        connectionMock.AddTable(RockBands.BandsMembersTable, RockBands.BandsMembersTableData);
+        connectionMock.AddTable(RockBands.AlbumsTable,       RockBands.AlbumsTableData);
+        connectionMock.AddTable(RockBands.BandsTable,        RockBands.BandsTableData);
 
         connectionMock.AddForeignKey((RockBands.AlbumsTableName, "BandId"),         (RockBands.BandsTableName, "Id"));
         connectionMock.AddForeignKey((RockBands.BandsMembersTableName, "BandId"),   (RockBands.BandsTableName, "Id"));
@@ -89,9 +60,9 @@ public class DependencyCrawlerTests
 
         // Assert
         insertTables.Length.Should().Be(4);
-        insertTables[0].Should().Be(RockBands.PeopleTableName);
-        insertTables[1].Should().Be(RockBands.BandsTableName);
-        insertTables[2].Should().Be(RockBands.BandsMembersTableName);
-        insertTables[3].Should().Be(RockBands.AlbumsTableName);
+        insertTables[0].Should().Be(RockBands.BandsTableName);
+        insertTables[1].Should().Be(RockBands.AlbumsTableName);
+        insertTables[2].Should().Be(RockBands.PeopleTableName);
+        insertTables[3].Should().Be(RockBands.BandsMembersTableName);
     }
 }

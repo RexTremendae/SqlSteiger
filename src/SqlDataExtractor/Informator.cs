@@ -11,10 +11,16 @@ public static class Informator
     public static void PrintTitle(string title)
     {
         ForegroundColor = FrameColor;
-        WriteLine("".PadLeft(title.Length + 4, '-'));
-        WriteLine($"- {title} -");
-        WriteLine("".PadLeft(title.Length + 4, '-'));
+        WriteLine("".PadLeft(title.Length + 6, '-'));
+        WriteLine($"-- {title} --");
+        WriteLine("".PadLeft(title.Length + 6, '-'));
         ResetColor();
+    }
+
+    public static void PrintSubtitle(string subtitle)
+    {
+        ForegroundColor = ConsoleColor.White;
+        WriteLine($"-- {subtitle} --");
     }
 
     public static void PrintTables(IEnumerable<DatabaseTableMetadata> tables)
@@ -61,8 +67,8 @@ public static class Informator
                 data.Add(dataRow.ToArray());
             }
 
+            PrintSubtitle($"Data: {tbl.Name}");
             ForegroundColor = ConsoleColor.White;
-            WriteLine($"- Data: {tbl.Name} -");
             WriteLine("".PadLeft(maxSize.Sum() + tbl.Columns.Length*3 + 1, '-'));
 
             var firstRow = true;

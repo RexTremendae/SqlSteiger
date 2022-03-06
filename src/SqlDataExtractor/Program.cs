@@ -36,5 +36,8 @@ var crawler = new DependencyCrawler(foreignKeyMap, tableMap);
 Informator.PrintTitle("Insert queries");
 foreach (var buildingBlocks in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, table, keyColumn, keyColumnValues))
 {
-    Console.WriteLine(buildingBlocks.CreateInsertQuery());
+    foreach(var query in buildingBlocks.CreateInsertQuery())
+    {
+        Console.WriteLine(query);
+    }
 }

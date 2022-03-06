@@ -27,6 +27,7 @@ public static class InsertQueryBuildingBlocksExtensions
         while (totalRows < values.Length)
         {
             var queryBuilder = new StringBuilder();
+            queryBuilder.AppendLine($"-- Table: {tableMetadata.Name} --");
             foreach (var col in identityColumns)
             {
                 queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} ON;");

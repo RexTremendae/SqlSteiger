@@ -17,8 +17,10 @@ public class DependencyCrawler
     public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync
         (IDbConnection connection, string startingTable, string keyColumn, params object[] keyColumnValues)
     {
-        var tableQueue = new List<(DatabaseTableMetadata table, string keyColumn, object[] keyColumnValues)>();
-        tableQueue.Add((_tables[startingTable], keyColumn, keyColumnValues));
+        var tableQueue = new List<(DatabaseTableMetadata table, string keyColumn, object[] keyColumnValues)>()
+        {
+            (_tables[startingTable], keyColumn, keyColumnValues)
+        };
 
         var insertQueryTablesVisited = new HashSet<string>();
         var insertQueryTableData = new List<InsertQueryBuildingBlocks>();
@@ -73,27 +75,63 @@ public class DependencyCrawler
         return OrderByDependencies(insertQueryTableData);
     }
 
-    private IEnumerable<InsertQueryBuildingBlocks> OrderByDependencies(List<InsertQueryBuildingBlocks> insertQueryBuildingBlocks)
+    private IEnumerable<InsertQueryBuildingBlocks> OrderByDependencies(IEnumerable<InsertQueryBuildingBlocks> insertQueryBuildingBlocks)
     {
         var sorted = new List<InsertQueryBuildingBlocks>();
+        var unsorted = insertQueryBuildingBlocks.ToList();
+        var sortedTableNames = new HashSet<string>();
 
-        foreach (var insertQueryBlocks in insertQueryBuildingBlocks)
+        var tableRelations = new Dictionary<string, HashSet<string>>();
+        foreach ((var from, var to) in _foreignKeys)
         {
-            var childDependencies = _foreignKeys
-                .Where(fk => fk.Key.table == insertQueryBlocks.TableMetadata.Name)
-                .Select(fk => fk.Value.table)
-                .ToHashSet();
-
-            var insertIdx = 0;
-            for (int i = 0; i < sorted.Count; i++)
+            if (!tableRelations.TryGetValue(from.table, out var toTables))
             {
-                if (childDependencies.Contains(sorted[i].TableMetadata.Name))
-                {
-                    insertIdx = i+1;
-                }
+                toTables = new HashSet<string>();
+                tableRelations.Add(from.table, toTables);
             }
+            toTables.Add(to.table);
+        }
 
-            sorted.Insert(insertIdx, insertQueryBlocks);
+        var anyChange = true;
+        while(anyChange)
+        {
+            anyChange = false;
+
+            for (int idx = 0; idx < unsorted.Count; idx++)
+            {
+                var current = unsorted[idx];
+                if (!tableRelations.TryGetValue(current.TableMetadata.Name, out var referendedTables))
+                {
+                    sorted.Add(current);
+                    sortedTableNames.Add(current.TableMetadata.Name);
+                    anyChange = true;
+                    unsorted.RemoveAt(idx);
+                    idx--;
+                    continue;
+                }
+
+                var shouldSortCurrent = true;
+                foreach (var referenced in referendedTables)
+                {
+                    if (!sortedTableNames.Contains(referenced))
+                    {
+                        shouldSortCurrent = false;
+                        break;
+                    }
+                }
+
+                if (!shouldSortCurrent) continue;
+                sorted.Add(current);
+                sortedTableNames.Add(current.TableMetadata.Name);
+                anyChange = true;
+                unsorted.RemoveAt(idx);
+                idx--;
+            }
+        }
+
+        if (unsorted.Any())
+        {
+            throw new InvalidOperationException($"Could not sort all tables. Unsorted tables: {string.Join(", ", unsorted)}");
         }
 
         return sorted;

@@ -54,6 +54,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"INSERT INTO dbo.Table ([IntColumn], [TextColumn]) VALUES{NewLine}" +
             $"(1, 'Txt'),{NewLine}" +
             $"(2, NULL);{NewLine}" +
@@ -90,6 +91,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(1),{NewLine}" +
@@ -131,6 +133,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(3);
         query.First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(1);{NewLine}" +
@@ -138,6 +141,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"GO{NewLine}"
         );
         query.Skip(1).First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(2);{NewLine}" +
@@ -145,6 +149,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"GO{NewLine}"
         );
         query.Skip(2).First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(3);{NewLine}" +
@@ -185,6 +190,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(2);
         query.First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(1),{NewLine}" +
@@ -193,6 +199,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"GO{NewLine}"
         );
         query.Skip(1).First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(3);{NewLine}" +
@@ -233,6 +240,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
+            $"-- Table: Table --{NewLine}" +
             $"SET IDENTITY_INSERT Table ON;{NewLine}" +
             $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
             $"(1),{NewLine}" +
