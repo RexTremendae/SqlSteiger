@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
-using Xunit;
+﻿namespace SqlDataExtractor.UnitTests;
 
-namespace SqlDataExtractor.UnitTests;
+using System.Data;
+using FluentAssertions;
+using Xunit;
 
 public class InsertQueryBuildingBlocksExtensionsTests
 {
@@ -28,8 +29,8 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", "int", typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", "text", typeof(string), IsNullable: true, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: true, IsIdentity: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -68,7 +69,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -107,7 +108,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -164,7 +165,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -214,7 +215,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", "int", typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);

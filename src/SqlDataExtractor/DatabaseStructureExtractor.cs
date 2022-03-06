@@ -1,5 +1,6 @@
 namespace SqlDataExtractor;
 
+using System.Data;
 using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
 using TableMetadataMap = Dictionary<string, DatabaseTableMetadata>;
 
@@ -21,13 +22,13 @@ public class DatabaseStructureExtractor
         {
             var tableName = reader.GetString(TableName);
             var columnName = reader.GetString(ColumnName);
-            var sqlDataType = reader.GetString(SqlDataType);
+            var sqlDataTypeString = reader.GetString(SqlDataType);
             var isNullable = reader.GetBoolean(IsNullable);
             var isIdentity = reader.GetBoolean(IsIdentity);
 
             if (tableName == null) throw new InvalidOperationException("TableName is null.");
             if (columnName == null) throw new InvalidOperationException("ColumnName is null.");
-            if (sqlDataType == null) throw new InvalidOperationException("SqlDataType is null.");
+            if (sqlDataTypeString == null) throw new InvalidOperationException("SqlDataType is null.");
             if (isNullable == null) throw new InvalidOperationException("IsNullable is null.");
             if (isIdentity == null) throw new InvalidOperationException("IsIdentity is null.");
 
@@ -37,6 +38,7 @@ public class DatabaseStructureExtractor
                 tables.Add(tableName, columnList);
             }
 
+            var sqlDataType = sqlDataTypeString.MapToSqlDbType();
             var csDataType = sqlDataType.MapToCSharpType();
             if (csDataType == typeof(IgnoredDataType))
             {

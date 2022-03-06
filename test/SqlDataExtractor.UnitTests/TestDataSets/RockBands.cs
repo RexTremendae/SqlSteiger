@@ -1,5 +1,7 @@
 ﻿namespace SqlDataExtractor.UnitTests.TestDataSets;
 
+using System.Data;
+
 public static class RockBands
 {
     // ▛▀▀▀▀▀▀▀▀▜
@@ -10,9 +12,9 @@ public static class RockBands
         Name: PeopleTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",          "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("FirstName",   "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("LastName",    "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("Id",        SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("FirstName", SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("LastName",  SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false)
         });
 
     public static readonly object?[][] PeopleTableData = new object?[][]
@@ -36,10 +38,10 @@ public static class RockBands
         Name: BandsTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",        "int",           typeof(int),    IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("Name",      "nvarchar(100)", typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("StartYear", "int",           typeof(int),    IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("EndYear",   "int",           typeof(int),    IsNullable: true,  IsIdentity: false)
+            new DatabaseColumnMetadata("Id",        SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("Name",      SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("StartYear", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("EndYear",   SqlDbType.Int,      typeof(int),    IsNullable: true,  IsIdentity: false)
         });
 
     public static readonly object?[][] BandsTableData = new object?[][]
@@ -57,8 +59,8 @@ public static class RockBands
         Name: BandsMembersTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("BandId",        "int",     typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("PersonId",      "int",     typeof(int), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("BandId",   SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("PersonId", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false)
         });
 
     public static readonly object?[][] BandsMembersTableData = new object?[][]
@@ -82,10 +84,10 @@ public static class RockBands
         Name: AlbumsTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",        "int",               typeof(int),    IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("BandId",    "int",               typeof(int),    IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("Name",      "nvarchar(100)",     typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("Year",      "int",               typeof(int),    IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("Id",     SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true ),
+            new DatabaseColumnMetadata("BandId", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("Name",   SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("Year",   SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false)
         });
 
     public static readonly object?[][] AlbumsTableData = new object?[][]

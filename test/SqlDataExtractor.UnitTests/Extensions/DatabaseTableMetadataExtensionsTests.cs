@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
-using Xunit;
+﻿namespace SqlDataExtractor.UnitTests.Extensions;
 
-namespace SqlDataExtractor.UnitTests.Extensions;
+using System.Data;
+using FluentAssertions;
+using Xunit;
 
 public class DatabaseTableMetadataExtensionsTests
 {
@@ -11,8 +12,8 @@ public class DatabaseTableMetadataExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", "int", typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", "text", typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -33,8 +34,8 @@ public class DatabaseTableMetadataExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", "int", typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", "text", typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
