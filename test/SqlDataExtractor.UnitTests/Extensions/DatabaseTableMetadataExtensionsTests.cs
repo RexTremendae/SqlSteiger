@@ -12,8 +12,8 @@ public class DatabaseTableMetadataExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -23,8 +23,8 @@ public class DatabaseTableMetadataExtensionsTests
 
         // Assert
         query.Should().Be(
-            $"SELECT [IntColumn], [TextColumn]{NewLine}" +
-            $"FROM dbo.Table;{NewLine}"
+            $"SELECT [IntColumn], [TextColumn]{LF}" +
+            $"FROM dbo.Table;{LF}"
         );
     }
 
@@ -34,8 +34,8 @@ public class DatabaseTableMetadataExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: true),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -47,11 +47,11 @@ public class DatabaseTableMetadataExtensionsTests
 
         // Assert
         query.Should().Be(
-            $"SELECT [IntColumn], [TextColumn]{NewLine}" +
-            $"FROM dbo.Table{NewLine}" +
-            $"WHERE IntColumn IN (6, 9);{NewLine}"
+            $"SELECT [IntColumn], [TextColumn]{LF}" +
+            $"FROM dbo.Table{LF}" +
+            $"WHERE IntColumn IN (6, 9);{LF}"
         );
     }
 
-    static readonly string NewLine = Environment.NewLine;
+    static readonly string LF = Environment.NewLine;
 }

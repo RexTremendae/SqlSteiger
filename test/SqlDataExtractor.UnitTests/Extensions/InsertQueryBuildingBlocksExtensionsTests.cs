@@ -29,8 +29,8 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: true, IsIdentity: false)
+            new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: true, IsIdentity: false, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -55,11 +55,11 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"INSERT INTO dbo.Table ([IntColumn], [TextColumn]) VALUES{NewLine}" +
-            $"(1, 'Txt'),{NewLine}" +
-            $"(2, NULL);{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"INSERT INTO dbo.Table ([IntColumn], [TextColumn]) VALUES{LF}" +
+            $"(1, 'Txt'),{LF}" +
+            $"(2, NULL);{LF}" +
+            $"GO{LF}"
         );
     }
 
@@ -69,7 +69,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -92,13 +92,13 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(1),{NewLine}" +
-            $"(2);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(1),{LF}" +
+            $"(2);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
     }
 
@@ -108,7 +108,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -134,28 +134,28 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(3);
         query.First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(1);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(1);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
         query.Skip(1).First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(2);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(2);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
         query.Skip(2).First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(3);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(3);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
     }
 
@@ -165,7 +165,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -191,21 +191,21 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(2);
         query.First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(1),{NewLine}" +
-            $"(2);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(1),{LF}" +
+            $"(2);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
         query.Skip(1).First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(3);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(3);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
     }
 
@@ -215,7 +215,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
@@ -241,16 +241,16 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Assert
         query.Length.Should().Be(1);
         query.First().Should().Be(
-            $"-- Table: Table --{NewLine}" +
-            $"SET IDENTITY_INSERT Table ON;{NewLine}" +
-            $"INSERT INTO dbo.Table ([Column]) VALUES{NewLine}" +
-            $"(1),{NewLine}" +
-            $"(2),{NewLine}" +
-            $"(3);{NewLine}" +
-            $"SET IDENTITY_INSERT Table OFF;{NewLine}" +
-            $"GO{NewLine}"
+            $"-- Table: Table --{LF}" +
+            $"SET IDENTITY_INSERT Table ON;{LF}" +
+            $"INSERT INTO dbo.Table ([Column]) VALUES{LF}" +
+            $"(1),{LF}" +
+            $"(2),{LF}" +
+            $"(3);{LF}" +
+            $"SET IDENTITY_INSERT Table OFF;{LF}" +
+            $"GO{LF}"
         );
     }
 
-    static readonly string NewLine = Environment.NewLine;
+    static readonly string LF = Environment.NewLine;
 }

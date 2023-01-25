@@ -19,7 +19,7 @@ else
   docker container run -d `
   -p 1433:1433 `
   --env ACCEPT_EULA=Y `
-  --env MSSQL_SA_PASSWORD=Password123 `
+  --env MSSQL_SA_PASSWORD=P4ssw0rd! `
   --name $containerName `
   $imageName
 }

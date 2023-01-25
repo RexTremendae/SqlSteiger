@@ -12,12 +12,12 @@ public static class Presidents
         Name: PeopleTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",          SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("FirstName",   SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("LastName",    SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfBirth", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfDeath", SqlDbType.Int,      typeof(int),    IsNullable: true,  IsIdentity: false),
-            new DatabaseColumnMetadata("BirthState",  SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false),
+            new DatabaseColumnMetadata("Id",          SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true,  IsPrimaryKeyPart: true),
+            new DatabaseColumnMetadata("FirstName",   SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("LastName",    SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("YearOfBirth", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("YearOfDeath", SqlDbType.Int,      typeof(int),    IsNullable: true,  IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("BirthState",  SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
         });
 
     public static readonly object?[][] PeopleTableData = new object?[][]
@@ -43,10 +43,10 @@ public static class Presidents
         Name: PrecidencyTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",        SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("PersonId",  SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("StartYear", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("EndYear",   SqlDbType.Int, typeof(int), IsNullable: true,  IsIdentity: false)
+            new DatabaseColumnMetadata("Id",        SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true,  IsPrimaryKeyPart: true),
+            new DatabaseColumnMetadata("PersonId",  SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("StartYear", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("EndYear",   SqlDbType.Int, typeof(int), IsNullable: true,  IsIdentity: false, IsPrimaryKeyPart: false)
         });
 
     public static readonly object?[][] PrecidencyTableData = new object?[][]
@@ -72,9 +72,9 @@ public static class Presidents
         Name: StatesTableName,
         Columns: new[]
         {
-            new DatabaseColumnMetadata("Id",          SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true ),
-            new DatabaseColumnMetadata("Name",        SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false),
-            new DatabaseColumnMetadata("YearOfUnion", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false)
+            new DatabaseColumnMetadata("Id",          SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true,  IsPrimaryKeyPart: true),
+            new DatabaseColumnMetadata("Name",        SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
+            new DatabaseColumnMetadata("YearOfUnion", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
         });
 
     public static readonly object?[][] StatesTableData = new object?[][]
