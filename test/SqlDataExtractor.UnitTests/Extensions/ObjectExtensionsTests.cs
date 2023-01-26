@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace SqlDataExtractor.UnitTests;
+namespace SqlDX.UnitTests;
 
 public class ObjectExtensionsTests
 {

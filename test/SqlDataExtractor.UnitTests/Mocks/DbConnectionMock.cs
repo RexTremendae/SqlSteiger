@@ -1,4 +1,4 @@
-﻿namespace SqlDataExtractor.UnitTests.Mocks;
+﻿namespace SqlDX.UnitTests.Mocks;
 
 using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
 using TableMetadataMap = Dictionary<string, DatabaseTableMetadata>;

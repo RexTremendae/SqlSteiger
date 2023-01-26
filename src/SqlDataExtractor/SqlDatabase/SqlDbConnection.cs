@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient;
 
-namespace SqlDataExtractor.SqlDatabase;
+namespace SqlDX.SqlDatabase;
 
 public class SqlDbConnection : IDbConnection
 {

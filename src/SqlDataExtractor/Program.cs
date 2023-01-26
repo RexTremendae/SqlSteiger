@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
-using SqlDataExtractor;
-using SqlDataExtractor.SqlDatabase;
+using SqlDX;
+using SqlDX.SqlDatabase;
 
 var connectionBuilder = new SqlConnectionStringBuilder();
 

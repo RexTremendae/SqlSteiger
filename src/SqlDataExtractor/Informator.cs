@@ -1,6 +1,6 @@
 using static System.Console;
 
-namespace SqlDataExtractor;
+namespace SqlDX;
 
 using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
 

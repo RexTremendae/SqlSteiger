@@ -1,4 +1,4 @@
-﻿namespace SqlDataExtractor.UnitTests.Extensions;
+﻿namespace SqlDX.UnitTests.Extensions;
 
 using System.Data;
 using FluentAssertions;

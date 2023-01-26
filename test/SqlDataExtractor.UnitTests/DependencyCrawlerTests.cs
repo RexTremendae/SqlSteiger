@@ -1,9 +1,9 @@
-﻿using SqlDataExtractor.UnitTests.Mocks;
-using FluentAssertions;
-using SqlDataExtractor.UnitTests.TestDataSets;
+﻿using FluentAssertions;
+using SqlDX.UnitTests.Mocks;
+using SqlDX.UnitTests.TestDataSets;
 using Xunit;
 
-namespace SqlDataExtractor.UnitTests;
+namespace SqlDX.UnitTests;
 
 public class DependencyCrawlerTests
 {

@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace SqlDataExtractor;
+namespace SqlDX;
 
 public static class ObjectExtensions
 {

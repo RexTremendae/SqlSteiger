@@ -1,4 +1,4 @@
-﻿namespace SqlDataExtractor.UnitTests.TestDataSets;
+﻿namespace SqlDX.UnitTests.TestDataSets;
 
 using System.Data;
 

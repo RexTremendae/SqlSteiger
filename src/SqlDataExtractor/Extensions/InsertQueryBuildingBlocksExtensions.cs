@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SqlDataExtractor;
+namespace SqlDX;
 
 public static class InsertQueryBuildingBlocksExtensions
 {

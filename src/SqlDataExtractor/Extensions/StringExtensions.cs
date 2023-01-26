@@ -1,4 +1,4 @@
-namespace SqlDataExtractor;
+namespace SqlDX;
 
 using System.Data;
 

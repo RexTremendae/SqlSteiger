@@ -1,4 +1,4 @@
-﻿namespace SqlDataExtractor.UnitTests.Mocks;
+﻿namespace SqlDX.UnitTests.Mocks;
 
 public class DbReaderMock : IDbDataReader
 {
