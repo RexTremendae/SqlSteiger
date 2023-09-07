@@ -1,7 +1,7 @@
 namespace SqlDX;
 
-using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
-using TableMetadataMap = Dictionary<string, DatabaseTableMetadata>;
+using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
+using TableMetadataMap = Dictionary<(string schema, string name), DatabaseTableMetadata>;
 
 public class DependencyCrawler
 {
@@ -15,14 +15,14 @@ public class DependencyCrawler
     }
 
     public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync
-        (IDbConnection connection, string startingTable, string keyColumn, params object[] keyColumnValues)
+        (IDbConnection connection, string startingSchema, string startingTable, string keyColumn, params object[] keyColumnValues)
     {
         var tableQueue = new List<(DatabaseTableMetadata table, string keyColumn, object[] keyColumnValues)>()
         {
-            (_tables[startingTable], keyColumn, keyColumnValues)
+            (_tables[(startingSchema, startingTable)], keyColumn, keyColumnValues)
         };
 
-        var insertQueryTablesVisited = new HashSet<string>();
+        var insertQueryTablesVisited = new HashSet<(string, string)>();
         var insertQueryTableData = new List<InsertQueryBuildingBlocks>();
 
         while (tableQueue.Any())
@@ -30,11 +30,11 @@ public class DependencyCrawler
             var dequeued = tableQueue.First();
             tableQueue.RemoveAt(0);
 
-            if (insertQueryTablesVisited.Contains(dequeued.table.Name))
+            if (insertQueryTablesVisited.Contains((dequeued.table.Name, dequeued.table.Schema)))
             {
                 continue;
             }
-            insertQueryTablesVisited.Add(dequeued.table.Name);
+            insertQueryTablesVisited.Add((dequeued.table.Name, dequeued.table.Schema));
 
             var selectQuery = dequeued.table.CreateSelectQuery(
                 keyColumn: dequeued.keyColumn,
@@ -61,14 +61,14 @@ public class DependencyCrawler
             foreach (var (from, to) in _foreignKeys.Where(fk => fk.Key.table == dequeued.table.Name))
             {
                 keyColumnValues = data.Select(d => d[from.column]).Cast<object>().ToArray();
-                tableQueue.Add((_tables[to.table], to.column, keyColumnValues));
+                tableQueue.Add((_tables[(to.schema, to.table)], to.column, keyColumnValues));
             }
 
             // Add parent dependencies
             foreach (var (from, to) in _foreignKeys.Where(fk => fk.Value.table == dequeued.table.Name))
             {
                 keyColumnValues = data.Select(d => d[to.column]).Cast<object>().ToArray();
-                tableQueue.Add((_tables[from.table], from.column, keyColumnValues));
+                tableQueue.Add((_tables[(from.schema, from.table)], from.column, keyColumnValues));
             }
         }
 

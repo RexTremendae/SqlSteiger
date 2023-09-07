@@ -43,6 +43,7 @@ public class SqlDbDataReader : IDbDataReader
             var t when t == typeof(TimeSpan)        => GetTimeSpan(columnName),
             var t when t == typeof(Guid)            => GetGuid(columnName),
             var t when t == typeof(byte[])          => GetByteArray(columnName),
+            var t when t == typeof(byte)            => GetByte(columnName),
             _ => throw new InvalidOperationException($"No definition for how to read type {csharpDataType.Name}")
         };
     }
@@ -165,6 +166,16 @@ public class SqlDbDataReader : IDbDataReader
         }
 
         return _dbDataReader.GetGuid(ordinal);
+    }
+
+    public byte? GetByte(string columnName)
+    {
+        if (!HasValue(columnName, out var ordinal))
+        {
+            return null;
+        }
+
+        return (byte)_dbDataReader.GetValue(ordinal);
     }
 
     public byte[]? GetByteArray(string columnName)

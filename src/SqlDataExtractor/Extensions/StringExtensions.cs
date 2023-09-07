@@ -6,27 +6,20 @@ public static class StringExtensions
 {
     public static SqlDbType MapToSqlDbType(this string sqlDbType)
     {
-        if (sqlDbType.Equals("numeric", StringComparison.OrdinalIgnoreCase))
+        return sqlDbType switch
         {
-            return SqlDbType.Decimal;
-        }
+            var x when x.Equals("numeric",     StringComparison.OrdinalIgnoreCase) => SqlDbType.Decimal,
+            var x when x.Equals("rowversion",  StringComparison.OrdinalIgnoreCase) => SqlDbType.Timestamp,
+            var x when x.Equals("sysname",     StringComparison.OrdinalIgnoreCase) => SqlDbType.NVarChar,
 
-        if (sqlDbType.Equals("rowversion", StringComparison.OrdinalIgnoreCase))
-        {
-            return SqlDbType.Timestamp;
-        }
+            // These special types are not really user defined, but it makes it easier to handle for now (they will be ignored)
+            var x when x.Equals("geography",   StringComparison.OrdinalIgnoreCase) => SqlDbType.Udt,
+            var x when x.Equals("geometry",    StringComparison.OrdinalIgnoreCase) => SqlDbType.Udt,
+            var x when x.Equals("hierarchyid", StringComparison.OrdinalIgnoreCase) => SqlDbType.Udt,
 
-        if (sqlDbType.Equals("Sysname", StringComparison.OrdinalIgnoreCase))
-        {
-            return SqlDbType.NVarChar;
-        }
-
-        if (!Enum.TryParse<SqlDbType>(sqlDbType, ignoreCase: true, out var parsedSqlDbType))
-        {
-            throw new InvalidOperationException($"No mapping found for type '{sqlDbType}'.");
-        }
-
-        return parsedSqlDbType;
+            _ => Enum.TryParse<SqlDbType>(sqlDbType, ignoreCase: true, out var parsedSqlDbType)
+                ? parsedSqlDbType
+                : throw new InvalidOperationException($"No mapping found for type '{sqlDbType}'.")
+        };
     }
 }
-

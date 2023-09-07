@@ -13,6 +13,7 @@ connectionBuilder.InitialCatalog = "";
 // Seems to be needed when connecting to a local SQL Server instance running in docker
 connectionBuilder.TrustServerCertificate = true;
 
+var schema = "";
 var table = "";
 var keyColumn = "";
 var keyColumnValues = new object[] {};
@@ -34,7 +35,7 @@ await Informator.PrintDataAsync(connection, tables);
 var crawler = new DependencyCrawler(foreignKeyMap, tableMap);
 
 Informator.PrintTitle("Insert queries");
-foreach (var buildingBlocks in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, table, keyColumn, keyColumnValues))
+foreach (var buildingBlocks in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, schema, table, keyColumn, keyColumnValues))
 {
     foreach(var query in buildingBlocks.CreateInsertQuery())
     {

@@ -10,6 +10,7 @@ public static class SqlDbTypeExtensions
         {
             SqlDbType.BigInt           => typeof(long),
             SqlDbType.Bit              => typeof(bool),
+            SqlDbType.Binary           => typeof(byte[]),
             SqlDbType.Char             => typeof(string),
             SqlDbType.Date             => typeof(DateTime),
             SqlDbType.DateTime         => typeof(DateTime),
@@ -17,6 +18,7 @@ public static class SqlDbTypeExtensions
             SqlDbType.DateTimeOffset   => typeof(DateTimeOffset),
             SqlDbType.Decimal          => typeof(decimal),
             SqlDbType.Float            => typeof(double),
+            SqlDbType.Image            => typeof(byte[]),
             SqlDbType.Int              => typeof(int),
             SqlDbType.Money            => typeof(decimal),
             SqlDbType.NChar            => typeof(string),
@@ -29,9 +31,12 @@ public static class SqlDbTypeExtensions
             SqlDbType.Text             => typeof(string),
             SqlDbType.Time             => typeof(TimeSpan),
             SqlDbType.Timestamp        => typeof(IgnoredDataType),
+            SqlDbType.TinyInt          => typeof(byte),
             SqlDbType.UniqueIdentifier => typeof(Guid),
             SqlDbType.VarBinary        => typeof(byte[]),
             SqlDbType.VarChar          => typeof(string),
+            SqlDbType.Udt              => typeof(IgnoredDataType),
+            SqlDbType.Xml              => typeof(string),
 
             _ => throw new InvalidOperationException($"No mapping defined for SQL type {sqlDataType}.")
         };

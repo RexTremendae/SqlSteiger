@@ -4,7 +4,7 @@ namespace SqlDX;
 
 public static class DatabaseTableMetadataExtensions
 {
-    public static string CreateSelectQuery(this DatabaseTableMetadata tableMetadata, string? keyColumn = null, IEnumerable<object>? keyColumnFilter = null)
+    public static string CreateSelectQuery(this DatabaseTableMetadata tableMetadata, string? keyColumn = null, IEnumerable<object>? keyColumnFilter = null, int? maxRows = null)
     {
         var columns = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
 
@@ -15,10 +15,11 @@ public static class DatabaseTableMetadataExtensions
             filterRow = $"WHERE {keyColumn} IN ({filterList})";
         }
 
+        var topStatement = maxRows.HasValue ? $"TOP {maxRows.Value} " : string.Empty;
         var queryLines = new List<string>(new[]
         {
-            $"SELECT {columns}",
-            $"FROM dbo.{tableMetadata.Name}"
+            $"SELECT {topStatement}{columns}",
+            $"FROM {tableMetadata.Schema}.{tableMetadata.Name}"
         });
 
         if (!string.IsNullOrEmpty(filterRow))

@@ -2,7 +2,7 @@ using static System.Console;
 
 namespace SqlDX;
 
-using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
+using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
 
 public static class Informator
 {
@@ -30,7 +30,7 @@ public static class Informator
         {
             var columnListing = string.Join(", ",
                 tbl.Columns.Select(c => $"{c.Name} [{c.SqlDataType}::{c.CSharpDataType}]"));
-            WriteLine($"{tbl.Name} ({columnListing})");
+            WriteLine($"{tbl.Schema}.{tbl.Name} ({columnListing})");
         }
         WriteLine();
     }
@@ -41,12 +41,12 @@ public static class Informator
         PrintTitle("Relations");
         foreach (var (from, to) in foreignKeys)
         {
-            WriteLine($"{from.table}.{from.column} => {to.table}.{to.column}");
+            WriteLine($"{from.schema}.{from.table}.{from.column} => {to.schema}.{to.table}.{to.column}");
         }
         WriteLine();
     }
 
-    public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables)
+    public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables, int? maxRows = null)
     {
         const string NullMarker = "<NULL>";
         foreach (var tbl in tables)
@@ -54,7 +54,7 @@ public static class Informator
             var data = new List<string?[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
             var maxSize = tbl.Columns.Select(c => c.Name.Length).ToArray();
 
-            await using var reader = await connection.ExecuteReaderAsync(tbl.CreateSelectQuery());
+            await using var reader = await connection.ExecuteReaderAsync(tbl.CreateSelectQuery(maxRows: maxRows));
             while (await reader.ReadAsync())
             {
                 var dataRow = new List<string?>();
@@ -67,7 +67,7 @@ public static class Informator
                 data.Add(dataRow.ToArray());
             }
 
-            PrintSubtitle($"Data: {tbl.Name}");
+            PrintSubtitle($"Data: {tbl.Schema}.{tbl.Name}");
             ForegroundColor = ConsoleColor.White;
             WriteLine("".PadLeft(maxSize.Sum() + tbl.Columns.Length*3 + 1, '-'));
 
