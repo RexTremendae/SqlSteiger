@@ -46,7 +46,7 @@ public static class Informator
         WriteLine();
     }
 
-    public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables, int? maxRows = null)
+    public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables, int? maxRows = null, int? maxColumnWidth = null)
     {
         const string NullMarker = "<NULL>";
         foreach (var tbl in tables)
@@ -67,6 +67,14 @@ public static class Informator
                 data.Add(dataRow.ToArray());
             }
 
+            if (maxColumnWidth.HasValue)
+            {
+                for (int i = 0; i < tbl.Columns.Length; i++)
+                {
+                    maxSize[i] = int.Min(maxSize[i], maxColumnWidth.Value);
+                }
+            }
+
             PrintSubtitle($"Data: {tbl.Schema}.{tbl.Name}");
             ForegroundColor = ConsoleColor.White;
             WriteLine("".PadLeft(maxSize.Sum() + tbl.Columns.Length*3 + 1, '-'));
@@ -83,7 +91,14 @@ public static class Informator
                     {
                         ForegroundColor = ConsoleColor.DarkGray;
                     }
-                    Write($" {(row[i] ?? NullMarker).PadRight(maxSize[i])} ");
+
+                    var printableData = (row[i] ?? NullMarker).PadRight(maxSize[i]);
+                    if (printableData.Length > maxSize[i])
+                    {
+                        printableData = printableData[..maxSize[i]];
+                    }
+
+                    Write($" {printableData} ");
                     ForegroundColor = ConsoleColor.White;
                     Write("|");
                     ResetColor();

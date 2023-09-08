@@ -12,14 +12,14 @@ public static class DatabaseTableMetadataExtensions
         if (keyColumn != null && (keyColumnFilter?.Any() ?? false))
         {
             var filterList = string.Join(", ", keyColumnFilter.Select(f => f.ToQueryValue()));
-            filterRow = $"WHERE {keyColumn} IN ({filterList})";
+            filterRow = $"WHERE [{keyColumn}] IN ({filterList})";
         }
 
         var topStatement = maxRows.HasValue ? $"TOP {maxRows.Value} " : string.Empty;
         var queryLines = new List<string>(new[]
         {
             $"SELECT {topStatement}{columns}",
-            $"FROM {tableMetadata.Schema}.{tableMetadata.Name}"
+            $"FROM [{tableMetadata.Schema}].[{tableMetadata.Name}]"
         });
 
         if (!string.IsNullOrEmpty(filterRow))
@@ -44,7 +44,7 @@ public static class DatabaseTableMetadataExtensions
     public static (string insert, string[] values) CreateInsertQueryParts(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
     {
         var columnListing = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
-        var queryInsert = $"INSERT INTO dbo.{tableMetadata.Name} ({columnListing}) VALUES";
+        var queryInsert = $"INSERT INTO [{tableMetadata.Schema}].[{tableMetadata.Name}] ({columnListing}) VALUES";
 
         var queryValues = new List<string>();
         foreach (var rowData in tableData)
