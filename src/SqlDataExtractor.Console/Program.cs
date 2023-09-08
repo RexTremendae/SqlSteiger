@@ -2,16 +2,17 @@
 using SqlDX;
 using SqlDX.SqlDatabase;
 
-var connectionBuilder = new SqlConnectionStringBuilder();
+var connectionBuilder = new SqlConnectionStringBuilder()
+{
+    DataSource = "localhost",
+    UserID = "sa",
+    Password = "",
+    IntegratedSecurity = false,
+    InitialCatalog = "",
 
-connectionBuilder.DataSource = "localhost";
-connectionBuilder.UserID = "sa";
-connectionBuilder.Password = "";
-connectionBuilder.IntegratedSecurity = false;
-connectionBuilder.InitialCatalog = "";
-
-// Seems to be needed when connecting to a local SQL Server instance running in docker
-connectionBuilder.TrustServerCertificate = true;
+    // Seems to be needed when connecting to a local SQL Server instance running in docker
+    TrustServerCertificate = true
+};
 
 var schema = "";
 var table = "";
