@@ -30,7 +30,7 @@ public static class InsertQueryBuildingBlocksExtensions
             queryBuilder.AppendLine($"-- Table: {tableMetadata.Name} --");
             foreach (var col in identityColumns)
             {
-                queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} ON;");
+                queryBuilder.AppendLine($"SET IDENTITY_INSERT [{tableMetadata.Schema}].[{tableMetadata.Name}] ON;");
             }
 
             queryBuilder.AppendLine(insert);
@@ -48,7 +48,7 @@ public static class InsertQueryBuildingBlocksExtensions
 
             foreach (var col in identityColumns)
             {
-                queryBuilder.AppendLine($"SET IDENTITY_INSERT {tableMetadata.Name} OFF;");
+                queryBuilder.AppendLine($"SET IDENTITY_INSERT [{tableMetadata.Schema}].[{tableMetadata.Name}] OFF;");
             }
 
             queryBuilder.AppendLine("GO");
