@@ -4,11 +4,14 @@ using System.Data;
 
 public static class RockBands
 {
+    public const string SchemaName = "dbo";
+
     // ▛▀▀▀▀▀▀▀▀▜
     // ▌ People ▐
     // ▙▄▄▄▄▄▄▄▄▟
     public const string PeopleTableName = "People";
     public static readonly DatabaseTableMetadata PeopleTable = new(
+        Schema: SchemaName,
         Name: PeopleTableName,
         Columns: new[]
         {
@@ -35,6 +38,7 @@ public static class RockBands
     // ▙▄▄▄▄▄▄▄▟
     public const string BandsTableName = "Bands";
     public static readonly DatabaseTableMetadata BandsTable = new(
+        Schema: SchemaName,
         Name: BandsTableName,
         Columns: new[]
         {
@@ -56,6 +60,7 @@ public static class RockBands
     // ▙▄▄▄▄▄▄▄▄▄▄▄▄▄▟
     public const string BandsMembersTableName = "BandMembers";
     public static readonly DatabaseTableMetadata BandsMembersTable = new(
+        Schema: SchemaName,
         Name: BandsMembersTableName,
         Columns: new[]
         {
@@ -81,6 +86,7 @@ public static class RockBands
     // ▙▄▄▄▄▄▄▄▄▟
     public const string AlbumsTableName = "Albums";
     public static readonly DatabaseTableMetadata AlbumsTable = new(
+        Schema: SchemaName,
         Name: AlbumsTableName,
         Columns: new[]
         {

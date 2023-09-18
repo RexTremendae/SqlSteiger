@@ -1,13 +1,13 @@
 ﻿namespace SqlDX.UnitTests.Mocks;
 
-using ForeignKeyMap = Dictionary<(string table, string column), (string table, string column)>;
-using TableMetadataMap = Dictionary<string, DatabaseTableMetadata>;
+using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
+using TableMetadataMap = Dictionary<(string schema, string table), DatabaseTableMetadata>;
 
 public class DbConnectionMock : IDbConnection
 {
     public ForeignKeyMap ForeignKeyMap { get; }
     public TableMetadataMap TableMetadataMap { get; }
-    private readonly Dictionary<string, IEnumerable<object?[]>> _tableData;
+    private readonly Dictionary<(string, string), IEnumerable<object?[]>> _tableData;
 
     public DbConnectionMock()
     {
@@ -18,8 +18,8 @@ public class DbConnectionMock : IDbConnection
 
     public void AddTable(DatabaseTableMetadata tableMetadata, IEnumerable<object?[]> dataRows)
     {
-        TableMetadataMap.Add(tableMetadata.Name, tableMetadata);
-        _tableData.Add(tableMetadata.Name, dataRows);
+        TableMetadataMap.Add((tableMetadata.Schema, tableMetadata.Name), tableMetadata);
+        _tableData.Add((tableMetadata.Schema, tableMetadata.Name), dataRows);
     }
 
     public ValueTask DisposeAsync()
@@ -29,14 +29,14 @@ public class DbConnectionMock : IDbConnection
 
     public Task<IDbDataReader> ExecuteReaderAsync(string commandText)
     {
-        foreach (var table in TableMetadataMap.Keys)
+        foreach (var (schema, table) in TableMetadataMap.Keys)
         {
-            var fromPart = $"FROM dbo.{table}";
+            var fromPart = $"FROM [{schema}].[{table}]";
             if (commandText.Contains($"{fromPart};") || commandText.Contains(fromPart + Environment.NewLine))
             {
                 return Task.FromResult<IDbDataReader>(new DbReaderMock(
-                    TableMetadataMap[table].Columns.Select(c => c.Name),
-                    _tableData[table]));
+                    TableMetadataMap[(schema, table)].Columns.Select(c => c.Name),
+                    _tableData[(schema, table)]));
             }
         }
 
@@ -48,7 +48,7 @@ public class DbConnectionMock : IDbConnection
         return Task.CompletedTask;
     }
 
-    public void AddForeignKey((string table, string column) from, (string table, string column) to)
+    public void AddForeignKey((string schema, string table, string column) from, (string schema, string table, string column) to)
     {
         ForeignKeyMap.Add(from, to);
     }

@@ -16,7 +16,7 @@ public class DatabaseTableMetadataExtensionsTests
             new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
         };
 
-        var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
+        var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
 
         // Act
         var query = DatabaseTableMetadataExtensions.CreateSelectQuery(databaseTableMetadata);
@@ -24,7 +24,7 @@ public class DatabaseTableMetadataExtensionsTests
         // Assert
         query.Should().Be(
             $"SELECT [IntColumn], [TextColumn]{LF}" +
-            $"FROM dbo.Table;{LF}"
+            $"FROM [dbo].[Table];{LF}"
         );
     }
 
@@ -38,7 +38,7 @@ public class DatabaseTableMetadataExtensionsTests
             new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
         };
 
-        var databaseTableMetadata = new DatabaseTableMetadata("Table", columnMetadata);
+        var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var keyColumn = "IntColumn";
         var keyColumnFilter = new object[] { 6, 9 };
 
@@ -48,8 +48,8 @@ public class DatabaseTableMetadataExtensionsTests
         // Assert
         query.Should().Be(
             $"SELECT [IntColumn], [TextColumn]{LF}" +
-            $"FROM dbo.Table{LF}" +
-            $"WHERE IntColumn IN (6, 9);{LF}"
+            $"FROM [dbo].[Table]{LF}" +
+            $"WHERE [IntColumn] IN (6, 9);{LF}"
         );
     }
 

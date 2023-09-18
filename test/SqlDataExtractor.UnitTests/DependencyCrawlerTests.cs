@@ -17,14 +17,19 @@ public class DependencyCrawlerTests
         connectionMock.AddTable(Presidents.PrecidencyTable, Presidents.PrecidencyTableData);
         connectionMock.AddTable(Presidents.StatesTable,     Presidents.StatesTableData);
 
-        connectionMock.AddForeignKey((Presidents.PrecidencyTableName, "PersonId"), (Presidents.PeopleTableName, "Id"));
-        connectionMock.AddForeignKey((Presidents.PeopleTableName, "BirthState"),   (Presidents.StatesTableName, "Id"));
+        connectionMock.AddForeignKey(
+            (Presidents.SchemaName, Presidents.PrecidencyTableName, "PersonId"),
+            (Presidents.SchemaName, Presidents.PeopleTableName, "Id"));
+
+        connectionMock.AddForeignKey(
+            (Presidents.SchemaName, Presidents.PeopleTableName, "BirthState"),
+            (Presidents.SchemaName, Presidents.StatesTableName, "Id"));
 
         var dependencyCrawler = new DependencyCrawler(connectionMock.ForeignKeyMap, connectionMock.TableMetadataMap);
 
         // Act
         var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
-            (connectionMock, Presidents.PrecidencyTableName, "Id", new object[] { 1 }))
+            (connectionMock, Presidents.SchemaName, Presidents.PrecidencyTableName, "Id", new object[] { 1 }))
             .Select(b => b.TableMetadata.Name)
             .ToArray();
 
@@ -46,15 +51,23 @@ public class DependencyCrawlerTests
         connectionMock.AddTable(RockBands.AlbumsTable,       RockBands.AlbumsTableData);
         connectionMock.AddTable(RockBands.BandsTable,        RockBands.BandsTableData);
 
-        connectionMock.AddForeignKey((RockBands.AlbumsTableName, "BandId"),         (RockBands.BandsTableName, "Id"));
-        connectionMock.AddForeignKey((RockBands.BandsMembersTableName, "BandId"),   (RockBands.BandsTableName, "Id"));
-        connectionMock.AddForeignKey((RockBands.BandsMembersTableName, "PersonId"), (RockBands.PeopleTableName, "Id"));
+        connectionMock.AddForeignKey(
+            (RockBands.SchemaName, RockBands.AlbumsTableName, "BandId"),
+            (RockBands.SchemaName, RockBands.BandsTableName, "Id"));
+
+        connectionMock.AddForeignKey(
+            (RockBands.SchemaName, RockBands.BandsMembersTableName, "BandId"),
+            (RockBands.SchemaName, RockBands.BandsTableName, "Id"));
+
+        connectionMock.AddForeignKey(
+            (RockBands.SchemaName, RockBands.BandsMembersTableName, "PersonId"),
+            (RockBands.SchemaName, RockBands.PeopleTableName, "Id"));
 
         var dependencyCrawler = new DependencyCrawler(connectionMock.ForeignKeyMap, connectionMock.TableMetadataMap);
 
         // Act
         var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
-            (connectionMock, RockBands.BandsTableName, "Id", new object[] { 1 }))
+            (connectionMock, RockBands.SchemaName, RockBands.BandsTableName, "Id", new object[] { 1 }))
             .Select(b => b.TableMetadata.Name)
             .ToArray();
 

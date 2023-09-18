@@ -4,11 +4,14 @@ using System.Data;
 
 public static class Presidents
 {
+    public const string SchemaName = "dbo";
+
     // ▛▀▀▀▀▀▀▀▀▜
     // ▌ People ▐
     // ▙▄▄▄▄▄▄▄▄▟
     public const string PeopleTableName = "People";
     public static readonly DatabaseTableMetadata PeopleTable = new(
+        Schema: SchemaName,
         Name: PeopleTableName,
         Columns: new[]
         {
@@ -40,6 +43,7 @@ public static class Presidents
     // ▙▄▄▄▄▄▄▄▄▄▄▄▄▟
     public const string PrecidencyTableName = "Precidency";
     public static readonly DatabaseTableMetadata PrecidencyTable = new(
+        Schema: SchemaName,
         Name: PrecidencyTableName,
         Columns: new[]
         {
@@ -69,6 +73,7 @@ public static class Presidents
     // ▙▄▄▄▄▄▄▄▄▟
     public const string StatesTableName = "States";
     public static readonly DatabaseTableMetadata StatesTable = new(
+        Schema: SchemaName,
         Name: StatesTableName,
         Columns: new[]
         {
