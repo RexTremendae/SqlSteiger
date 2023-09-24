@@ -1,5 +1,6 @@
 namespace SqlDX;
 
+using System.Data;
 using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
 using TableMetadataMap = Dictionary<(string schema, string name), DatabaseTableMetadata>;
 
@@ -7,38 +8,45 @@ public class DependencyCrawler
 {
     private readonly TableMetadataMap _tables;
     private readonly ForeignKeyMap _foreignKeys;
+    private readonly List<(string schema, string table, string keyColumn, object keyColumnValue)> _queue;
+    private readonly HashSet<(string schema, string table, string keyColumn, object keyColumnValue)> _visited;
+    private readonly Dictionary<(string schema, string table, string keyColumn), List<object>> _queryBaseData;
 
     public DependencyCrawler(ForeignKeyMap foreignKeys, TableMetadataMap tables)
     {
         _tables = tables;
         _foreignKeys = foreignKeys;
+        _queue = new();
+        _visited = new();
+        _queryBaseData = new();
     }
 
-    public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync
-        (IDbConnection connection, string startingSchema, string startingTable, string keyColumn, params object[] keyColumnValues)
+    public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync(
+        IDbConnection connection,
+        string startingSchema,
+        string startingTable,
+        string keyColumn,
+        params object[] keyColumnValues)
     {
-        var tableQueue = new List<(DatabaseTableMetadata table, string keyColumn, object[] keyColumnValues)>()
-        {
-            (_tables[(startingSchema, startingTable)], keyColumn, keyColumnValues)
-        };
+        _queue.Clear();
+        _visited.Clear();
 
-        var insertQueryTablesVisited = new HashSet<(string, string)>();
+        Enqueue(startingSchema, startingTable, keyColumn, keyColumnValues);
+
         var insertQueryTableData = new List<InsertQueryBuildingBlocks>();
 
-        while (tableQueue.Any())
+        while (_queue.Any())
         {
-            var dequeued = tableQueue.First();
-            tableQueue.RemoveAt(0);
+            if (_queue.Count > 120) break;
 
-            if (insertQueryTablesVisited.Contains((dequeued.table.Name, dequeued.table.Schema)))
-            {
-                continue;
-            }
-            insertQueryTablesVisited.Add((dequeued.table.Name, dequeued.table.Schema));
+            var dequeued = _queue.First();
+            _queue.RemoveAt(0);
 
-            var selectQuery = dequeued.table.CreateSelectQuery(
+            _visited.Add((dequeued.schema, dequeued.table, dequeued.keyColumn, dequeued.keyColumnValue));
+
+            var selectQuery = _tables[(dequeued.schema, dequeued.table)].CreateSelectQuery(
                 keyColumn: dequeued.keyColumn,
-                keyColumnFilter: dequeued.keyColumnValues);
+                keyColumnFilter: new[] { dequeued.keyColumnValue });
 
             var data = new List<Dictionary<string, object?>>();
 
@@ -49,47 +57,65 @@ public class DependencyCrawler
                 var dataRow = new Dictionary<string, object?>();
                 data.Add(dataRow);
 
-                foreach (var col in dequeued.table.Columns)
+                foreach (var col in _tables[(dequeued.schema, dequeued.table)].Columns)
                 {
                     dataRow.Add(col.Name, reader.GetValue(col));
                 }
             }
 
-            insertQueryTableData.Add(new InsertQueryBuildingBlocks(dequeued.table, data));
+            insertQueryTableData.Add(new InsertQueryBuildingBlocks(_tables[(dequeued.schema, dequeued.table)], data));
 
             // Add child dependencies
-            foreach (var (from, to) in _foreignKeys.Where(fk => fk.Key.table == dequeued.table.Name))
+            foreach (var (from, to) in _foreignKeys.Where(fk =>
+                fk.Key.table == dequeued.table &&
+                fk.Key.schema == dequeued.schema))
             {
                 keyColumnValues = data.Select(d => d[from.column]).Cast<object>().ToArray();
-                tableQueue.Add((_tables[(to.schema, to.table)], to.column, keyColumnValues));
+                Enqueue(to.schema, to.table, to.column, keyColumnValues);
             }
 
             // Add parent dependencies
-            foreach (var (from, to) in _foreignKeys.Where(fk => fk.Value.table == dequeued.table.Name))
+            foreach (var (from, to) in _foreignKeys.Where(fk =>
+                fk.Value.table == dequeued.table &&
+                fk.Value.schema == dequeued.schema))
             {
                 keyColumnValues = data.Select(d => d[to.column]).Cast<object>().ToArray();
-                tableQueue.Add((_tables[(from.schema, from.table)], from.column, keyColumnValues));
+                Enqueue(from.schema, from.table, from.column, keyColumnValues);
             }
         }
 
         return OrderByDependencies(insertQueryTableData);
     }
 
+    private void Enqueue(string schema, string table, string keyColumn, object[] keyColumnValues)
+    {
+        foreach (var value in keyColumnValues)
+        {
+            if (_visited.Contains((schema, table, keyColumn, value)))
+            {
+                continue;
+            }
+
+            _queue.Add((schema, table, keyColumn, value));
+            _visited.Add((schema, table, keyColumn, value));
+        }
+    }
+
     private IEnumerable<InsertQueryBuildingBlocks> OrderByDependencies(IEnumerable<InsertQueryBuildingBlocks> insertQueryBuildingBlocks)
     {
         var sorted = new List<InsertQueryBuildingBlocks>();
         var unsorted = insertQueryBuildingBlocks.ToList();
-        var sortedTableNames = new HashSet<string>();
+        var sortedTableNames = new HashSet<(string schema, string table)>();
 
-        var tableRelations = new Dictionary<string, HashSet<string>>();
+        var tableRelations = new Dictionary<(string schema, string table), HashSet<(string schema, string table)>>();
         foreach ((var from, var to) in _foreignKeys)
         {
-            if (!tableRelations.TryGetValue(from.table, out var toTables))
+            if (!tableRelations.TryGetValue((from.schema, from.table), out var toTables))
             {
-                toTables = new HashSet<string>();
-                tableRelations.Add(from.table, toTables);
+                toTables = new();
+                tableRelations.Add((from.schema, from.table), toTables);
             }
-            toTables.Add(to.table);
+            toTables.Add((to.schema, to.table));
         }
 
         var anyChange = true;
@@ -100,10 +126,11 @@ public class DependencyCrawler
             for (int idx = 0; idx < unsorted.Count; idx++)
             {
                 var current = unsorted[idx];
-                if (!tableRelations.TryGetValue(current.TableMetadata.Name, out var referendedTables))
+                var currentTableKey = (current.TableMetadata.Schema, current.TableMetadata.Name);
+                if (!tableRelations.TryGetValue(currentTableKey, out var referendedTables))
                 {
                     sorted.Add(current);
-                    sortedTableNames.Add(current.TableMetadata.Name);
+                    sortedTableNames.Add(currentTableKey);
                     anyChange = true;
                     unsorted.RemoveAt(idx);
                     idx--;
@@ -122,7 +149,7 @@ public class DependencyCrawler
 
                 if (!shouldSortCurrent) continue;
                 sorted.Add(current);
-                sortedTableNames.Add(current.TableMetadata.Name);
+                sortedTableNames.Add(currentTableKey);
                 anyChange = true;
                 unsorted.RemoveAt(idx);
                 idx--;
@@ -131,7 +158,8 @@ public class DependencyCrawler
 
         if (unsorted.Any())
         {
-            throw new InvalidOperationException($"Could not sort all tables. Unsorted tables: {string.Join(", ", unsorted)}");
+            sorted.AddRange(unsorted);
+            //throw new InvalidOperationException($"Could not sort all tables. Unsorted tables: {string.Join(", ", unsorted.Select(_ => $"[{_.TableMetadata.Schema}].[{_.TableMetadata.Name}]"))}");
         }
 
         return sorted;
