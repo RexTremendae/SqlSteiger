@@ -1,4 +1,4 @@
-namespace SqlDX;
+namespace SqlDX.Extensions;
 
 using System.Globalization;
 
