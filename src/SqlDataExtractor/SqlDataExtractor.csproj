@@ -10,4 +10,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="[5.1.1]" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SqlDataExtractor.FakeData\SqlDataExtractor.FakeData.csproj" />
+  </ItemGroup>
 </Project>
