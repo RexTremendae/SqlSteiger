@@ -11,8 +11,8 @@ public static class ByteArrayExtensions
         foreach (var d in bytes)
         {
             var i = (int)d;
-            builder.Append(HexRepresentation(i/16));
-            builder.Append(HexRepresentation(i%16));
+            builder.Append(HexRepresentation(i / 16));
+            builder.Append(HexRepresentation(i % 16));
         }
 
         return builder.ToString();

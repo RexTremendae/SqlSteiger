@@ -85,7 +85,7 @@ public static class Informator
                 ForegroundColor = ConsoleColor.White;
                 Write("|");
                 ResetColor();
-                for (int i = 0; i < maxSize.Length; i ++)
+                for (int i = 0; i < maxSize.Length; i++)
                 {
                     if (row[i] == null)
                     {
