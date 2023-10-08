@@ -117,7 +117,7 @@ public class DependencyCrawler
         }
 
         var anyChange = true;
-        while(anyChange)
+        while (anyChange)
         {
             anyChange = false;
 
