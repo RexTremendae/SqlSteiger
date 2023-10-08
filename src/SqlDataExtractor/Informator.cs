@@ -6,7 +6,7 @@ using ForeignKeyMap = Dictionary<(string schema, string table, string column), (
 
 public static class Informator
 {
-    private static ConsoleColor FrameColor = ConsoleColor.White;
+    private static readonly ConsoleColor FrameColor = ConsoleColor.White;
 
     public static void PrintTitle(string title)
     {

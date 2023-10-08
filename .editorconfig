@@ -12,7 +12,6 @@ csharp_style_namespace_declarations = file_scoped
 dotnet_diagnostic.IDE0008.severity = none # Use explicit type instead of 'var' - nope!
 dotnet_diagnostic.IDE0011.severity = none # Add braces to 'if' statement
 dotnet_diagnostic.IDE0022.severity = none # Use block body for method
-dotnet_diagnostic.IDE0044.severity = none # Make field readonly
 dotnet_diagnostic.IDE0046.severity = none # 'if' statement can be simplified
 dotnet_diagnostic.IDE0048.severity = none # Parentheses should be added for clarity
 dotnet_diagnostic.IDE0052.severity = none # Private member can be removed as the value assigned to it is never read
