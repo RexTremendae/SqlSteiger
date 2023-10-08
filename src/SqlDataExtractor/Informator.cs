@@ -1,6 +1,6 @@
-using static System.Console;
-
 namespace SqlDX;
+
+using static System.Console;
 
 using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
 

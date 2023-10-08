@@ -1,6 +1,6 @@
-using Microsoft.Data.SqlClient;
-
 namespace SqlDX.SqlDatabase;
+
+using Microsoft.Data.SqlClient;
 
 public class SqlDbConnection : IDbConnection
 {

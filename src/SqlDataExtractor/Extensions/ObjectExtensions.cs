@@ -1,6 +1,6 @@
-using System.Globalization;
-
 namespace SqlDX;
+
+using System.Globalization;
 
 public static class ObjectExtensions
 {

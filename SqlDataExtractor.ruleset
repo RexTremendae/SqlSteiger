@@ -4,7 +4,6 @@
     <Rule Id="SA1025" Action="None" /> <!-- SA1025: Code should not contain multiple whitespace characters in a row -->
     <Rule Id="SA1101" Action="None" /> <!-- SA1101: Prefix local calls with this -->
     <Rule Id="SA1135" Action="None" /> <!-- SA1135: Using directive for type 'System.Collections.Generic.Dictionary<,>' should be qualified -->
-    <Rule Id="SA1200" Action="None" /> <!-- SA1200: Using directive should appear within a namespace declaration -->
     <Rule Id="SA1202" Action="None" /> <!-- SA1202: 'public' members should come before 'private' members -->
     <Rule Id="SA1306" Action="None" /> <!-- SA1306: Field 'FrameColor' should begin with lower-case letter -->
     <Rule Id="SA1309" Action="None" /> <!-- SA1309: Field should not begin with an underscore -->

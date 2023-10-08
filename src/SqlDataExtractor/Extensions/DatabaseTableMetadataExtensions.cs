@@ -1,6 +1,6 @@
-using System.Text;
-
 namespace SqlDX;
+
+using System.Text;
 
 public static class DatabaseTableMetadataExtensions
 {
