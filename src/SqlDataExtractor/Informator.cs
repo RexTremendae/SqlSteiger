@@ -28,7 +28,8 @@ public static class Informator
         PrintTitle("Tables");
         foreach (var tbl in tables)
         {
-            var columnListing = string.Join(", ",
+            var columnListing = string.Join(
+                ", ",
                 tbl.Columns.Select(c => $"{c.Name} [{c.SqlDataType}::{c.CSharpDataType}]"));
             WriteLine($"{tbl.Schema}.{tbl.Name} ({columnListing})");
         }
