@@ -4,7 +4,6 @@
     <Rule Id="SA1025" Action="None" /> <!-- SA1025: Code should not contain multiple whitespace characters in a row -->
     <Rule Id="SA1101" Action="None" /> <!-- SA1101: Prefix local calls with this -->
     <Rule Id="SA1135" Action="None" /> <!-- SA1135: Using directive for type 'System.Collections.Generic.Dictionary<,>' should be qualified -->
-    <Rule Id="SA1202" Action="None" /> <!-- SA1202: 'public' members should come before 'private' members -->
     <Rule Id="SA1309" Action="None" /> <!-- SA1309: Field should not begin with an underscore -->
     <Rule Id="SA1316" Action="None" /> <!-- SA1316: Tuple element names should use correct casing -->
     <Rule Id="SA1413" Action="None" /> <!-- SA1413: Use trailing comma in multi-line initializers -->

@@ -188,6 +188,11 @@ public class SqlDbDataReader : IDbDataReader
         return (byte[])_dbDataReader.GetValue(ordinal);
     }
 
+    public async ValueTask DisposeAsync()
+    {
+        await _dbDataReader.DisposeAsync();
+    }
+
     private bool HasValue(string columnName, out int ordinal)
     {
         ordinal = GetOrdinal(columnName);
@@ -202,10 +207,5 @@ public class SqlDbDataReader : IDbDataReader
     private int GetOrdinal(string columnName)
     {
         return _dbDataReader.GetOrdinal(columnName);
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await _dbDataReader.DisposeAsync();
     }
 }
