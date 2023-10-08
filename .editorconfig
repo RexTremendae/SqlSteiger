@@ -1,0 +1,24 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
+[*.cs]
+# Default severity for analyzer diagnostics with category 'Style' (escalated to build warnings)
+dotnet_analyzer_diagnostic.category-Style.severity = error
+dotnet_analyzer_diagnostic.category-CodeQuality.severity = error
+
+# enable IDE0161: Convert to file-scoped namespace
+csharp_style_namespace_declarations = file_scoped
+
+dotnet_diagnostic.IDE0004.severity = none # Cast is redundant
+dotnet_diagnostic.IDE0008.severity = none # Use explicit type instead of 'var' - nope!
+dotnet_diagnostic.IDE0011.severity = none # Add braces to 'if' statement
+dotnet_diagnostic.IDE0022.severity = none # Use block body for method
+dotnet_diagnostic.IDE0044.severity = none # Make field readonly
+dotnet_diagnostic.IDE0046.severity = none # 'if' statement can be simplified
+dotnet_diagnostic.IDE0048.severity = none # Parentheses should be added for clarity
+dotnet_diagnostic.IDE0052.severity = none # Private member can be removed as the value assigned to it is never read
+dotnet_diagnostic.IDE0055.severity = none # Just says 'Fix formatting' without further details - very annoying!
+dotnet_diagnostic.IDE0058.severity = none # Expression value is never used
+dotnet_diagnostic.IDE0065.severity = none # Using directives must be placed outside of a namespace declaration - conflicts with SA1200
+dotnet_diagnostic.IDE0072.severity = none # Populate switch - this rule requires all enum values to be explicit, only '_ =>' for default is not enough
+dotnet_diagnostic.IDE0130.severity = none # Namespace does not match folder structure
