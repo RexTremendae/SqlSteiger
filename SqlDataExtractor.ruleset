@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Rules for StyleCop.Analyzers" Description="Code analysis rules for StyleCop.Analyzers.csproj." ToolsVersion="14.0">
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1008" Action="None" /> <!-- SA1008: Opening parenthesis should not be preceded by a space -->
     <Rule Id="SA1009" Action="None" /> <!-- SA1009: Closing parenthesis should not be preceded by a space -->
     <Rule Id="SA1020" Action="None" /> <!-- SA1020: Increment symbol '++' should not be preceded by a space -->
     <Rule Id="SA1025" Action="None" /> <!-- SA1025: Code should not contain multiple whitespace characters in a row -->
