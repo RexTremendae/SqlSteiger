@@ -41,6 +41,7 @@ public static class InsertQueryBuildingBlocksExtensions
 
                 queryBuilder.AppendLine(values[totalRows + i] + rowEnding);
             }
+
             totalRows += configuration.MaxRowBatchSize;
 
             foreach (var col in identityColumns)

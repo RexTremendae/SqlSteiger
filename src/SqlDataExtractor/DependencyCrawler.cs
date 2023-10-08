@@ -113,6 +113,7 @@ public class DependencyCrawler
                 toTables = new();
                 tableRelations.Add((from.schema, from.table), toTables);
             }
+
             toTables.Add((to.schema, to.table));
         }
 

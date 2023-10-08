@@ -49,6 +49,7 @@ public class DatabaseStructureExtractor
             {
                 continue;
             }
+
             columnList.Add(
                 new DatabaseColumnMetadata(
                     Name: columnName,

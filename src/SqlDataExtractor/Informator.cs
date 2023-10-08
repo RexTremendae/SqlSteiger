@@ -33,6 +33,7 @@ public static class Informator
                 tbl.Columns.Select(c => $"{c.Name} [{c.SqlDataType}::{c.CSharpDataType}]"));
             WriteLine($"{tbl.Schema}.{tbl.Name} ({columnListing})");
         }
+
         WriteLine();
     }
 
@@ -44,6 +45,7 @@ public static class Informator
         {
             WriteLine($"{from.schema}.{from.table}.{from.column} => {to.schema}.{to.table}.{to.column}");
         }
+
         WriteLine();
     }
 
@@ -65,6 +67,7 @@ public static class Informator
                     dataRow.Add(reader.GetValue(col.Name, col.CSharpDataType)?.ToString());
                     maxSize[i] = Math.Max(maxSize[i], dataRow[i]?.Length ?? NullMarker.Length);
                 }
+
                 data.Add(dataRow.ToArray());
             }
 
@@ -104,6 +107,7 @@ public static class Informator
                     Write("|");
                     ResetColor();
                 }
+
                 WriteLine();
 
                 if (firstRow)
@@ -114,6 +118,7 @@ public static class Informator
                     ResetColor();
                 }
             }
+
             ForegroundColor = ConsoleColor.White;
             WriteLine(string.Empty.PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'));
             ResetColor();

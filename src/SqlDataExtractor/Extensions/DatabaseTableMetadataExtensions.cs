@@ -35,6 +35,7 @@ public static class DatabaseTableMetadataExtensions
             {
                 line += ";";
             }
+
             queryBuilder.AppendLine(line);
         }
 
@@ -60,6 +61,7 @@ public static class DatabaseTableMetadataExtensions
                 var value = rowData[column.Name];
                 queryBuilder.Append(value.ToQueryValue());
             }
+
             queryBuilder.Append(')');
             queryValues.Add(queryBuilder.ToString());
         }
