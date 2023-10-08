@@ -17,7 +17,8 @@ public static class ObjectExtensions
 
         var queryValue = ToString(value, type);
 
-        var quoted = new[] {
+        var quoted = new[]
+        {
             typeof(string),
             typeof(DateTime),
             typeof(DateTimeOffset),
