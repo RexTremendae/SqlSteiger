@@ -2,7 +2,7 @@ namespace SqlDX;
 
 using static System.Console;
 
-using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
+using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
 
 public static class Informator
 {
@@ -43,7 +43,7 @@ public static class Informator
         PrintTitle("Relations");
         foreach (var (from, to) in foreignKeys)
         {
-            WriteLine($"{from.schema}.{from.table}.{from.column} => {to.schema}.{to.table}.{to.column}");
+            WriteLine($"{from.Schema}.{from.Table}.{from.Column} => {to.Schema}.{to.Table}.{to.Column}");
         }
 
         WriteLine();

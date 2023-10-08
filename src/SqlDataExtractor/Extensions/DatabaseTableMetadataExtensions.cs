@@ -46,7 +46,7 @@ public static class DatabaseTableMetadataExtensions
         return queryBuilder.ToString();
     }
 
-    public static (string insert, string[] values) CreateInsertQueryParts(
+    public static (string Insert, string[] Values) CreateInsertQueryParts(
         this DatabaseTableMetadata tableMetadata,
         IEnumerable<Dictionary<string, object?>> tableData)
     {

@@ -1,7 +1,7 @@
 namespace SqlDX;
 
-using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
-using TableMetadataMap = Dictionary<(string schema, string table), DatabaseTableMetadata>;
+using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
+using TableMetadataMap = Dictionary<(string Schema, string Table), DatabaseTableMetadata>;
 
 public class DatabaseStructureExtractor
 {
@@ -14,7 +14,7 @@ public class DatabaseStructureExtractor
 
     public async Task<TableMetadataMap> ExtractTableMapAsync()
     {
-        var tables = new Dictionary<(string schema, string table), List<DatabaseColumnMetadata>>();
+        var tables = new Dictionary<(string Schema, string Table), List<DatabaseColumnMetadata>>();
         await using var reader = await _connection.ExecuteReaderAsync(SqlQueries.TableColumnsQuery);
 
         while (await reader.ReadAsync())
@@ -61,8 +61,8 @@ public class DatabaseStructureExtractor
         }
 
         return tables.ToDictionary(
-            key => (key.Key.schema, key.Key.table),
-            value => new DatabaseTableMetadata(Schema: $"{value.Key.schema}", Name: $"{value.Key.table}", Columns: value.Value.ToArray()));
+            key => (key.Key.Schema, key.Key.Table),
+            value => new DatabaseTableMetadata(Schema: $"{value.Key.Schema}", Name: $"{value.Key.Table}", Columns: value.Value.ToArray()));
     }
 
     public async Task<ForeignKeyMap> ExtractForeignKeyMapAsync()
