@@ -38,7 +38,7 @@ public static class SqlDbTypeExtensions
             SqlDbType.Udt              => typeof(IgnoredDataType),
             SqlDbType.Xml              => typeof(string),
 
-            _ => throw new InvalidOperationException($"No mapping defined for SQL type {sqlDataType}.")
+            _ => throw new InvalidOperationException($"No mapping defined for SQL type {sqlDataType}."),
         };
     }
 }

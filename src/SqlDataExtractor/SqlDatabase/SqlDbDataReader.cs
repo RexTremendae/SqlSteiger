@@ -44,7 +44,7 @@ public class SqlDbDataReader : IDbDataReader
             var t when t == typeof(Guid)            => GetGuid(columnName),
             var t when t == typeof(byte[])          => GetByteArray(columnName),
             var t when t == typeof(byte)            => GetByte(columnName),
-            _ => throw new InvalidOperationException($"No definition for how to read type {csharpDataType.Name}")
+            _ => throw new InvalidOperationException($"No definition for how to read type {csharpDataType.Name}"),
         };
     }
 

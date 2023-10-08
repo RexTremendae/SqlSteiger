@@ -23,7 +23,7 @@ public static class ObjectExtensions
             typeof(DateTime),
             typeof(DateTimeOffset),
             typeof(TimeSpan),
-            typeof(Guid)
+            typeof(Guid),
         }.Contains(type);
 
         return quoted
@@ -39,7 +39,7 @@ public static class ObjectExtensions
             var t when t == typeof(double)  => ((double)value).ToString(CultureInfo.InvariantCulture),
             var t when t == typeof(decimal) => ((decimal)value).ToString(CultureInfo.InvariantCulture),
             var t when t == typeof(byte[])  => ((byte[])value).ToStringRepresentation(),
-            _ => value.ToString()
+            _ => value.ToString(),
         };
 
         return returnValue!;

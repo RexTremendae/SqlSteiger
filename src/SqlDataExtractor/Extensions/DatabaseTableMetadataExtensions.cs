@@ -23,7 +23,7 @@ public static class DatabaseTableMetadataExtensions
         var queryLines = new List<string>(new[]
         {
             $"SELECT {topStatement}{columns}",
-            $"FROM [{tableMetadata.Schema}].[{tableMetadata.Name}]"
+            $"FROM [{tableMetadata.Schema}].[{tableMetadata.Name}]",
         });
 
         if (!string.IsNullOrEmpty(filterRow))

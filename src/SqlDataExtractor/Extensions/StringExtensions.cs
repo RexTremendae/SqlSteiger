@@ -19,7 +19,7 @@ public static class StringExtensions
 
             _ => Enum.TryParse<SqlDbType>(sqlDbType, ignoreCase: true, out var parsedSqlDbType)
                 ? parsedSqlDbType
-                : throw new InvalidOperationException($"No mapping found for type '{sqlDbType}'.")
+                : throw new InvalidOperationException($"No mapping found for type '{sqlDbType}'."),
         };
     }
 }
