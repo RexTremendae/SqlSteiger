@@ -158,8 +158,10 @@ public class DependencyCrawler
         if (unsorted.Any())
         {
             sorted.AddRange(unsorted);
-            // var unsortedTables = string.Join(", ", unsorted.Select(_ => $"[{_.TableMetadata.Schema}].[{_.TableMetadata.Name}]"));
-            // throw new InvalidOperationException($"Could not sort all tables. Unsorted tables: {unsortedTables}");
+            /*
+            var unsortedTables = string.Join(", ", unsorted.Select(_ => $"[{_.TableMetadata.Schema}].[{_.TableMetadata.Name}]"));
+            throw new InvalidOperationException($"Could not sort all tables. Unsorted tables: {unsortedTables}");
+            */
         }
 
         return sorted;
