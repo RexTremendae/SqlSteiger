@@ -10,7 +10,6 @@ public class DependencyCrawler
     private readonly ForeignKeyMap _foreignKeys;
     private readonly List<(string schema, string table, string keyColumn, object keyColumnValue)> _queue;
     private readonly HashSet<(string schema, string table, string keyColumn, object keyColumnValue)> _visited;
-    private readonly Dictionary<(string schema, string table, string keyColumn), List<object>> _queryBaseData;
 
     public DependencyCrawler(ForeignKeyMap foreignKeys, TableMetadataMap tables)
     {
@@ -18,7 +17,6 @@ public class DependencyCrawler
         _foreignKeys = foreignKeys;
         _queue = new();
         _visited = new();
-        _queryBaseData = new();
     }
 
     public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync(
