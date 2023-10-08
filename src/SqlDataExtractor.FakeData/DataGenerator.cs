@@ -4,7 +4,10 @@ public class DataGenerator
 {
     private static readonly Dictionary<Locale, IFakeDataGenerator> _dataGenerators = new();
 
-    public int GenerateInteger(int exclusiveMax) => GenerateInteger(0, exclusiveMax);
+    public int GenerateInteger(int exclusiveMax)
+    {
+        return GenerateInteger(0, exclusiveMax);
+    }
 
     public int GenerateInteger(int inclusiveMin, int exclusiveMax)
     {
