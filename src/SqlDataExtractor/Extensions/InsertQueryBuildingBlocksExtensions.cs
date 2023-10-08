@@ -6,10 +6,7 @@ public static class InsertQueryBuildingBlocksExtensions
 {
     public static IEnumerable<string> CreateInsertQuery(this InsertQueryBuildingBlocks buildingBlocks)
     {
-        var defaultConfiguration = new InsertQueryConfiguration
-        (
-            MaxRowBatchSize: 1000
-        );
+        var defaultConfiguration = new InsertQueryConfiguration(MaxRowBatchSize: 1000);
 
         return CreateInsertQuery(buildingBlocks, defaultConfiguration);
     }

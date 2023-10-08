@@ -49,14 +49,14 @@ public class DatabaseStructureExtractor
             {
                 continue;
             }
-            columnList.Add(new DatabaseColumnMetadata(
-                Name: columnName,
-                SqlDataType: sqlDataType,
-                CSharpDataType: csDataType,
-                IsNullable: isNullable.Value,
-                IsIdentity: isIdentity.Value,
-                IsPrimaryKeyPart: isPrimaryKeyPart.Value
-            ));
+            columnList.Add(
+                new DatabaseColumnMetadata(
+                    Name: columnName,
+                    SqlDataType: sqlDataType,
+                    CSharpDataType: csDataType,
+                    IsNullable: isNullable.Value,
+                    IsIdentity: isIdentity.Value,
+                    IsPrimaryKeyPart: isPrimaryKeyPart.Value));
         }
 
         return tables.ToDictionary(
