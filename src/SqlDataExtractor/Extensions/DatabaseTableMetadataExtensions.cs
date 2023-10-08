@@ -8,7 +8,7 @@ public static class DatabaseTableMetadataExtensions
     {
         var columns = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
 
-        var filterRow = "";
+        var filterRow = string.Empty;
         if (keyColumn != null && (keyColumnFilter?.Any() ?? false))
         {
             var filterList = string.Join(", ", keyColumnFilter.Select(f => f.ToQueryValue()));
