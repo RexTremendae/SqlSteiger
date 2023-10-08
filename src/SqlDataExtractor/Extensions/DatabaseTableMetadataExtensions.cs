@@ -77,4 +77,3 @@ public static class DatabaseTableMetadataExtensions
             : (string.Empty, Array.Empty<string>());
     }
 }
-
