@@ -49,7 +49,11 @@ public static class Informator
         WriteLine();
     }
 
-    public static async Task PrintDataAsync(IDbConnection connection, IEnumerable<DatabaseTableMetadata> tables, int? maxRows = null, int? maxColumnWidth = null)
+    public static async Task PrintDataAsync(
+        IDbConnection connection,
+        IEnumerable<DatabaseTableMetadata> tables,
+        int? maxRows = null,
+        int? maxColumnWidth = null)
     {
         const string NullMarker = "<NULL>";
         foreach (var tbl in tables)

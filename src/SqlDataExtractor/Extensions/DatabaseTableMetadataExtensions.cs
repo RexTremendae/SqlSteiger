@@ -4,7 +4,11 @@ using System.Text;
 
 public static class DatabaseTableMetadataExtensions
 {
-    public static string CreateSelectQuery(this DatabaseTableMetadata tableMetadata, string? keyColumn = null, IEnumerable<object>? keyColumnFilter = null, int? maxRows = null)
+    public static string CreateSelectQuery(
+        this DatabaseTableMetadata tableMetadata,
+        string? keyColumn = null,
+        IEnumerable<object>? keyColumnFilter = null,
+        int? maxRows = null)
     {
         var columns = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
 
@@ -42,7 +46,9 @@ public static class DatabaseTableMetadataExtensions
         return queryBuilder.ToString();
     }
 
-    public static (string insert, string[] values) CreateInsertQueryParts(this DatabaseTableMetadata tableMetadata, IEnumerable<Dictionary<string, object?>> tableData)
+    public static (string insert, string[] values) CreateInsertQueryParts(
+        this DatabaseTableMetadata tableMetadata,
+        IEnumerable<Dictionary<string, object?>> tableData)
     {
         var columnListing = string.Join(", ", tableMetadata.Columns.Select(c => $"[{c.Name}]"));
         var queryInsert = $"INSERT INTO [{tableMetadata.Schema}].[{tableMetadata.Name}] ({columnListing}) VALUES";

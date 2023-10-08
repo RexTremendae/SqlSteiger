@@ -17,7 +17,9 @@
     <Rule Id="SA1633" Action="None" /> <!-- SA1633: The file header is missing or not located at the top of the file -->
     <Rule Id="SA1649" Action="None" /> <!-- SA1649: File name should match first type name -->
   </Rules>
+
+  <!-- Rules with ids on the form MENXXX - all rules fixed, but keep this here for future use to remember the AnalyzerId and RuleNamespace... -->
   <Rules AnalyzerId="Menees.Analyzers" RuleNamespace="Menees.Analyzers">
-    <Rule Id="MEN002" Action="None" /> <!-- MEN002: Line must be no longer than 160 characters -->
   </Rules>
+
 </RuleSet>
