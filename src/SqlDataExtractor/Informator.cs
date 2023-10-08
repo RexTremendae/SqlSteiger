@@ -77,7 +77,7 @@ public static class Informator
 
             PrintSubtitle($"Data: {tbl.Schema}.{tbl.Name}");
             ForegroundColor = ConsoleColor.White;
-            WriteLine("".PadLeft(maxSize.Sum() + tbl.Columns.Length*3 + 1, '-'));
+            WriteLine("".PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'));
 
             var firstRow = true;
             foreach (var row in data)
@@ -108,13 +108,13 @@ public static class Informator
                 if (firstRow)
                 {
                     ForegroundColor = ConsoleColor.White;
-                    WriteLine("".PadLeft(maxSize.Sum() + row.Length*3 + 1, '-'));
+                    WriteLine("".PadLeft(maxSize.Sum() + (row.Length * 3) + 1, '-'));
                     firstRow = false;
                     ResetColor();
                 }
             }
             ForegroundColor = ConsoleColor.White;
-            WriteLine("".PadLeft(maxSize.Sum() + tbl.Columns.Length*3 + 1, '-'));
+            WriteLine("".PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'));
             ResetColor();
             WriteLine();
         }
