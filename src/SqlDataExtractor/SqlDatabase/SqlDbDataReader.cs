@@ -50,142 +50,100 @@ public class SqlDbDataReader : IDbDataReader
 
     public short? GetInt16(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetInt16(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetInt16(ordinal)
+            : null;
     }
 
     public int? GetInt32(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetInt32(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetInt32(ordinal)
+            : null;
     }
 
     public long? GetInt64(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetInt64(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetInt64(ordinal)
+            : null;
     }
 
     public float? GetFloat(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetFloat(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetFloat(ordinal)
+            : null;
     }
 
     public double? GetDouble(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetDouble(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetDouble(ordinal)
+            : null;
     }
 
     public decimal? GetDecimal(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetDecimal(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetDecimal(ordinal)
+            : null;
     }
 
     public string? GetString(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetString(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetString(ordinal)
+            : null;
     }
 
     public bool? GetBoolean(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetBoolean(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetBoolean(ordinal)
+            : null;
     }
 
     public DateTime? GetDateTime(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetDateTime(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetDateTime(ordinal)
+            : null;
     }
 
     public DateTimeOffset? GetDateTimeOffset(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetDateTimeOffset(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetDateTimeOffset(ordinal)
+            : null;
     }
 
     public TimeSpan? GetTimeSpan(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetTimeSpan(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetTimeSpan(ordinal)
+            : null;
     }
 
     public Guid? GetGuid(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return _dbDataReader.GetGuid(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? _dbDataReader.GetGuid(ordinal)
+            : null;
     }
 
     public byte? GetByte(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return (byte)_dbDataReader.GetValue(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? (byte)_dbDataReader.GetValue(ordinal)
+            : null;
     }
 
     public byte[]? GetByteArray(string columnName)
     {
-        if (!HasValue(columnName, out var ordinal))
-        {
-            return null;
-        }
-
-        return (byte[])_dbDataReader.GetValue(ordinal);
+        return HasValue(columnName, out var ordinal)
+            ? (byte[])_dbDataReader.GetValue(ordinal)
+            : null;
     }
 
     public async ValueTask DisposeAsync()
@@ -196,12 +154,7 @@ public class SqlDbDataReader : IDbDataReader
     private bool HasValue(string columnName, out int ordinal)
     {
         ordinal = GetOrdinal(columnName);
-        if (_dbDataReader.IsDBNull(ordinal))
-        {
-            return false;
-        }
-
-        return true;
+        return !_dbDataReader.IsDBNull(ordinal);
     }
 
     private int GetOrdinal(string columnName)
