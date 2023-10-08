@@ -35,7 +35,10 @@ public class DependencyCrawler
 
         while (_queue.Any())
         {
-            if (_queue.Count > 120) break;
+            if (_queue.Count > 120)
+            {
+                break;
+            }
 
             var (dequeuedSchema, dequeuedTable, dequeuedKeyColumn, dequeuedKeyColumnValue) = _queue.First();
             _queue.RemoveAt(0);
@@ -146,7 +149,11 @@ public class DependencyCrawler
                     }
                 }
 
-                if (!shouldSortCurrent) continue;
+                if (!shouldSortCurrent)
+                {
+                    continue;
+                }
+
                 sorted.Add(current);
                 sortedTableNames.Add(currentTableKey);
                 anyChange = true;

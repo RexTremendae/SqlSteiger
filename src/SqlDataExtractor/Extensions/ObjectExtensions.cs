@@ -6,7 +6,10 @@ public static class ObjectExtensions
 {
     public static string ToQueryValue(this object? value)
     {
-        if (value == null) return "NULL";
+        if (value == null)
+        {
+            return "NULL";
+        }
 
         var type = value.GetType();
 

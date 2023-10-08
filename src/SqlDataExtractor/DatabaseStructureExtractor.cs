@@ -28,14 +28,45 @@ public class DatabaseStructureExtractor
             var isPrimaryKeyPart = reader.GetBoolean(SqlQueries.IsPrimaryKeyPart);
             var isUserDefined = reader.GetBoolean(SqlQueries.IsUserDefined);
 
-            if (schemaName == null) throw new InvalidOperationException($"{SqlQueries.SchemaName} is null.");
-            if (tableName == null) throw new InvalidOperationException($"{SqlQueries.TableName} is null.");
-            if (columnName == null) throw new InvalidOperationException($"{SqlQueries.ColumnName} is null.");
-            if (sqlDataTypeString == null) throw new InvalidOperationException($"{SqlQueries.SqlDataType} is null.");
-            if (isNullable == null) throw new InvalidOperationException($"{SqlQueries.IsNullable} is null.");
-            if (isIdentity == null) throw new InvalidOperationException($"{SqlQueries.IsIdentity} is null.");
-            if (isPrimaryKeyPart == null) throw new InvalidOperationException($"{SqlQueries.IsPrimaryKeyPart} is null.");
-            if (isUserDefined == null) throw new InvalidOperationException($"{SqlQueries.IsUserDefined} is null.");
+            if (schemaName == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.SchemaName} is null.");
+            }
+
+            if (tableName == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.TableName} is null.");
+            }
+
+            if (columnName == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.ColumnName} is null.");
+            }
+
+            if (sqlDataTypeString == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.SqlDataType} is null.");
+            }
+
+            if (isNullable == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.IsNullable} is null.");
+            }
+
+            if (isIdentity == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.IsIdentity} is null.");
+            }
+
+            if (isPrimaryKeyPart == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.IsPrimaryKeyPart} is null.");
+            }
+
+            if (isUserDefined == null)
+            {
+                throw new InvalidOperationException($"{SqlQueries.IsUserDefined} is null.");
+            }
 
             if (!tables.TryGetValue((schemaName, tableName), out var columnList))
             {
@@ -79,12 +110,35 @@ public class DatabaseStructureExtractor
             var referencedTableName = reader.GetString(SqlQueries.ReferencedTableName);
             var referencedColumnName = reader.GetString(SqlQueries.ReferencedColumnName);
 
-            if (schemaName == null) throw new InvalidOperationException("SchemaName is null.");
-            if (tableName == null) throw new InvalidOperationException("TableName is null.");
-            if (columnName == null) throw new InvalidOperationException("ColumnName is null.");
-            if (referencedSchemaName == null) throw new InvalidOperationException("ReferencedSchemaName is null.");
-            if (referencedTableName == null) throw new InvalidOperationException("ReferencedTableName is null.");
-            if (referencedColumnName == null) throw new InvalidOperationException("ReferencedColumnName is null.");
+            if (schemaName == null)
+            {
+                throw new InvalidOperationException("SchemaName is null.");
+            }
+
+            if (tableName == null)
+            {
+                throw new InvalidOperationException("TableName is null.");
+            }
+
+            if (columnName == null)
+            {
+                throw new InvalidOperationException("ColumnName is null.");
+            }
+
+            if (referencedSchemaName == null)
+            {
+                throw new InvalidOperationException("ReferencedSchemaName is null.");
+            }
+
+            if (referencedTableName == null)
+            {
+                throw new InvalidOperationException("ReferencedTableName is null.");
+            }
+
+            if (referencedColumnName == null)
+            {
+                throw new InvalidOperationException("ReferencedColumnName is null.");
+            }
 
             foreignKeyMap.Add((schemaName, tableName, columnName), (referencedSchemaName, referencedTableName, referencedColumnName));
         }

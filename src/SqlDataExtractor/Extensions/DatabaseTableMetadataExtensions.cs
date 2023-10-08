@@ -61,8 +61,14 @@ public static class DatabaseTableMetadataExtensions
             bool firstColumn = true;
             foreach (var column in tableMetadata.Columns)
             {
-                if (firstColumn) firstColumn = false;
-                else queryBuilder.Append(", ");
+                if (firstColumn)
+                {
+                    firstColumn = false;
+                }
+                else
+                {
+                    queryBuilder.Append(", ");
+                }
 
                 var value = rowData[column.Name];
                 queryBuilder.Append(value.ToQueryValue());
