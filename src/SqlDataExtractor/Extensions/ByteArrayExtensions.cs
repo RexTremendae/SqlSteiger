@@ -22,6 +22,6 @@ public static class ByteArrayExtensions
     {
         return d < 10
             ? d.ToString()
-            : ((char)((int)'A' + (d - 10))).ToString();
+            : ((char)('A' + (d - 10))).ToString();
     }
 }
