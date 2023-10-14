@@ -23,7 +23,7 @@ public partial class SwedishFakeDataGenerator
         "Tage",
         "Viktor",
         "William",
-        "Örjan"
+        "Örjan",
     };
 
     private static readonly string[] FirstNamesFemale = new[]
@@ -44,7 +44,7 @@ public partial class SwedishFakeDataGenerator
         "Sandra", "Sofia",
         "Ulrika",
         "Vera",
-        "Wilma"
+        "Wilma",
     };
 
     private static readonly string[] LastNames = new[]
@@ -87,7 +87,7 @@ public partial class SwedishFakeDataGenerator
         "tandem",
         "undantagstillstånd",
         "vanilj", "vistelse",
-        "xylofon"
+        "xylofon",
     };
 
     private static readonly string[] TopDomains = new[]
@@ -98,7 +98,7 @@ public partial class SwedishFakeDataGenerator
         ".net",
         ".nu",
         ".org",
-        ".se"
+        ".se",
     };
 
     private static readonly string[] Addresses = new[]
@@ -125,7 +125,7 @@ public partial class SwedishFakeDataGenerator
         "Waldenströmsplan",
         "Åsgatan",
         "Ängsälvsvägen",
-        "Övre Olskroksgatan"
+        "Övre Olskroksgatan",
     };
 
     private static readonly string[] Countries = new[]
@@ -153,7 +153,7 @@ public partial class SwedishFakeDataGenerator
         "USA", "Uzbekistan",
         "Vatikanstaten",
         "Zimbabwe",
-        "Österrke"
+        "Österrke",
     };
 
     private static readonly string[] Cities = new[]
@@ -182,7 +182,7 @@ public partial class SwedishFakeDataGenerator
         "Ystad",
         "Åtvidaberg",
         "Älmhult",
-        "Östersund"
+        "Östersund",
     };
 
     // Fake personal identities (testpersonnummer) from skatteverket.se
@@ -212,6 +212,6 @@ public partial class SwedishFakeDataGenerator
         "196604072618", "195807112643", "195008072307",
         "194603213424", "193909268462", "193111158808",
         "192508298037", "192112249202", "191006089807",
-        "190807189808", "190308289800", "190103169819"
+        "190807189808", "190308289800", "190103169819",
     };
 }

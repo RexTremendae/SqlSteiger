@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+﻿namespace SqlSteiger.UnitTests;
+
+using FluentAssertions;
 using SqlSteiger.UnitTests.Mocks;
 using SqlSteiger.UnitTests.TestDataSets;
 using Xunit;
-
-namespace SqlSteiger.UnitTests;
 
 public class DependencyCrawlerTests
 {
@@ -28,10 +28,14 @@ public class DependencyCrawlerTests
         var dependencyCrawler = new DependencyCrawler(connectionMock.ForeignKeyMap, connectionMock.TableMetadataMap);
 
         // Act
-        var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
-            (connectionMock, Presidents.SchemaName, Presidents.PrecidencyTableName, "Id", new object[] { 1 }))
-            .Select(b => b.TableMetadata.Name)
-            .ToArray();
+        var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync(
+            connection: connectionMock,
+            startingSchema: Presidents.SchemaName,
+            startingTable: Presidents.PrecidencyTableName,
+            keyColumn: "Id",
+            keyColumnValues: new object[] { 1 }))
+                .Select(b => b.TableMetadata.Name)
+                .ToArray();
 
         // Assert
         insertTables.Length.Should().Be(3);
@@ -66,10 +70,14 @@ public class DependencyCrawlerTests
         var dependencyCrawler = new DependencyCrawler(connectionMock.ForeignKeyMap, connectionMock.TableMetadataMap);
 
         // Act
-        var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync
-            (connectionMock, RockBands.SchemaName, RockBands.BandsTableName, "Id", new object[] { 1 }))
-            .Select(b => b.TableMetadata.Name)
-            .ToArray();
+        var insertTables = (await dependencyCrawler.GetInsertQueriesBuildingBlocksAsync(
+            connection: connectionMock,
+            startingSchema: RockBands.SchemaName,
+            startingTable: RockBands.BandsTableName,
+            keyColumn: "Id",
+            keyColumnValues: new object[] { 1 }))
+                .Select(b => b.TableMetadata.Name)
+                .ToArray();
 
         // Assert
         insertTables.Length.Should().Be(4);

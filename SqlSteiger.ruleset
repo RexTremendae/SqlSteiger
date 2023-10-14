@@ -7,6 +7,8 @@
     <Rule Id="SA1309" Action="None" /> <!-- SA1309: Field should not begin with an underscore -->
     <Rule Id="SA1503" Action="None" /> <!-- SA1503: Braces should not be omitted -->
     <Rule Id="SA1600" Action="None" /> <!-- SA1600: Elements should be documented -->
+    <Rule Id="SA1601" Action="None" /> <!-- SA1601: Partial elements should be documented -->
+    <Rule Id="SA1602" Action="None" /> <!-- SA1602: Enumeration items should be documented -->
     <Rule Id="SA1633" Action="None" /> <!-- SA1633: The file header is missing or not located at the top of the file -->
     <Rule Id="SA1649" Action="None" /> <!-- SA1649: File name should match first type name -->
   </Rules>

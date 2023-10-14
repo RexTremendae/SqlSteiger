@@ -5,11 +5,13 @@ using System.Data;
 public static class Presidents
 {
     public const string SchemaName = "dbo";
+    public const string StatesTableName = "States";
+    public const string PrecidencyTableName = "Precidency";
+    public const string PeopleTableName = "People";
 
     // ▛▀▀▀▀▀▀▀▀▜
     // ▌ People ▐
     // ▙▄▄▄▄▄▄▄▄▟
-    public const string PeopleTableName = "People";
     public static readonly DatabaseTableMetadata PeopleTable = new(
         Schema: SchemaName,
         Name: PeopleTableName,
@@ -34,14 +36,12 @@ public static class Presidents
         new object?[] {  7, "Andrew",      "Jackson",      1767, 1845, 3 },
         new object?[] {  8, "Abraham",     "Lincoln",      1809, 1865, 5 },
         new object?[] {  9, "Theodore",    "Roosevelt",    1901, 1909, 6 },
-        new object?[] { 10, "Franklin D.", "Roosevelt",    1901, 1909, 6 }
+        new object?[] { 10, "Franklin D.", "Roosevelt",    1901, 1909, 6 },
     };
-
 
     // ▛▀▀▀▀▀▀▀▀▀▀▀▀▜
     // ▌ Precidency ▐
     // ▙▄▄▄▄▄▄▄▄▄▄▄▄▟
-    public const string PrecidencyTableName = "Precidency";
     public static readonly DatabaseTableMetadata PrecidencyTable = new(
         Schema: SchemaName,
         Name: PrecidencyTableName,
@@ -50,7 +50,7 @@ public static class Presidents
             new DatabaseColumnMetadata("Id",        SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true,  IsPrimaryKeyPart: true),
             new DatabaseColumnMetadata("PersonId",  SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
             new DatabaseColumnMetadata("StartYear", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
-            new DatabaseColumnMetadata("EndYear",   SqlDbType.Int, typeof(int), IsNullable: true,  IsIdentity: false, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("EndYear",   SqlDbType.Int, typeof(int), IsNullable: true,  IsIdentity: false, IsPrimaryKeyPart: false),
         });
 
     public static readonly object?[][] PrecidencyTableData = new object?[][]
@@ -64,14 +64,12 @@ public static class Presidents
         new object?[] {  7,  7, 1829, 1837 },
         new object?[] { 16,  8, 1861, 1865 },
         new object?[] { 25,  9, 1901, 1909 },
-        new object?[] { 31, 10, 1933, 1945 }
+        new object?[] { 31, 10, 1933, 1945 },
     };
-
 
     // ▛▀▀▀▀▀▀▀▀▜
     // ▌ States ▐
     // ▙▄▄▄▄▄▄▄▄▟
-    public const string StatesTableName = "States";
     public static readonly DatabaseTableMetadata StatesTable = new(
         Schema: SchemaName,
         Name: StatesTableName,
@@ -79,7 +77,7 @@ public static class Presidents
         {
             new DatabaseColumnMetadata("Id",          SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: true,  IsPrimaryKeyPart: true),
             new DatabaseColumnMetadata("Name",        SqlDbType.NVarChar, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
-            new DatabaseColumnMetadata("YearOfUnion", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("YearOfUnion", SqlDbType.Int,      typeof(int),    IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
         });
 
     public static readonly object?[][] StatesTableData = new object?[][]
@@ -89,7 +87,6 @@ public static class Presidents
         new object?[] { 3, "North Carolina", 1789 },
         new object?[] { 4, "South Carolina", 1788 },
         new object?[] { 5, "Kentucky",       1792 },
-        new object?[] { 6, "New York",       1788 }
+        new object?[] { 6, "New York",       1788 },
     };
 }
-

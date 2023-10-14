@@ -6,6 +6,8 @@ using Xunit;
 
 public class DatabaseTableMetadataExtensionsTests
 {
+    private static readonly string LF = Environment.NewLine;
+
     [Fact]
     public void CreateSelectQuery_IntAndNullableTextColumns_NoFilter()
     {
@@ -13,7 +15,7 @@ public class DatabaseTableMetadataExtensionsTests
         var columnMetadata = new[]
         {
             new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
@@ -24,8 +26,7 @@ public class DatabaseTableMetadataExtensionsTests
         // Assert
         query.Should().Be(
             $"SELECT [IntColumn], [TextColumn]{LF}" +
-            $"FROM [dbo].[Table];{LF}"
-        );
+            $"FROM [dbo].[Table];{LF}");
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class DatabaseTableMetadataExtensionsTests
         var columnMetadata = new[]
         {
             new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: true),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
@@ -49,9 +50,6 @@ public class DatabaseTableMetadataExtensionsTests
         query.Should().Be(
             $"SELECT [IntColumn], [TextColumn]{LF}" +
             $"FROM [dbo].[Table]{LF}" +
-            $"WHERE [IntColumn] IN (6, 9);{LF}"
-        );
+            $"WHERE [IntColumn] IN (6, 9);{LF}");
     }
-
-    static readonly string LF = Environment.NewLine;
 }

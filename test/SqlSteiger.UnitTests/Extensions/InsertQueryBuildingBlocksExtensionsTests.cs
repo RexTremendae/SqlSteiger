@@ -6,6 +6,8 @@ using Xunit;
 
 public class InsertQueryBuildingBlocksExtensionsTests
 {
+    private static readonly string LF = Environment.NewLine;
+
     [Fact]
     public void CreateInsertQuery_NoData()
     {
@@ -30,20 +32,22 @@ public class InsertQueryBuildingBlocksExtensionsTests
         var columnMetadata = new[]
         {
             new DatabaseColumnMetadata("IntColumn", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: false, IsPrimaryKeyPart: false),
-            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: true, IsIdentity: false, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("TextColumn", SqlDbType.Text, typeof(string), IsNullable: true, IsIdentity: false, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var dataRows = new Dictionary<string, object?>[]
         {
-            new Dictionary<string, object?> {
+            new Dictionary<string, object?>
+            {
                 { "IntColumn", 1 },
-                { "TextColumn", "Txt" }
+                { "TextColumn", "Txt" },
             },
-            new Dictionary<string, object?> {
+            new Dictionary<string, object?>
+            {
                 { "IntColumn", 2 },
-                { "TextColumn", null }
-            }
+                { "TextColumn", null },
+            },
         };
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
@@ -59,8 +63,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"INSERT INTO [dbo].[Table] ([IntColumn], [TextColumn]) VALUES{LF}" +
             $"(1, 'Txt'),{LF}" +
             $"(2, NULL);{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
     }
 
     [Fact]
@@ -69,18 +72,20 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var dataRows = new Dictionary<string, object?>[]
         {
-            new Dictionary<string, object?> {
-                { "Column", 1 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 1 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 2 }
-            }
+            new Dictionary<string, object?>
+            {
+                { "Column", 2 },
+            },
         };
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
@@ -98,8 +103,7 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"(1),{LF}" +
             $"(2);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
     }
 
     [Fact]
@@ -108,21 +112,24 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var dataRows = new Dictionary<string, object?>[]
         {
-            new Dictionary<string, object?> {
-                { "Column", 1 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 1 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 2 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 2 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 3 }
-            }
+            new Dictionary<string, object?>
+            {
+                { "Column", 3 },
+            },
         };
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
@@ -139,24 +146,21 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"INSERT INTO [dbo].[Table] ([Column]) VALUES{LF}" +
             $"(1);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
         query.Skip(1).First().Should().Be(
             $"-- Table: Table --{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] ON;{LF}" +
             $"INSERT INTO [dbo].[Table] ([Column]) VALUES{LF}" +
             $"(2);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
         query.Skip(2).First().Should().Be(
             $"-- Table: Table --{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] ON;{LF}" +
             $"INSERT INTO [dbo].[Table] ([Column]) VALUES{LF}" +
             $"(3);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
     }
 
     [Fact]
@@ -165,21 +169,24 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var dataRows = new Dictionary<string, object?>[]
         {
-            new Dictionary<string, object?> {
-                { "Column", 1 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 1 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 2 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 2 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 3 }
-            }
+            new Dictionary<string, object?>
+            {
+                { "Column", 3 },
+            },
         };
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
@@ -197,16 +204,14 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"(1),{LF}" +
             $"(2);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
         query.Skip(1).First().Should().Be(
             $"-- Table: Table --{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] ON;{LF}" +
             $"INSERT INTO [dbo].[Table] ([Column]) VALUES{LF}" +
             $"(3);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
     }
 
     [Fact]
@@ -215,21 +220,24 @@ public class InsertQueryBuildingBlocksExtensionsTests
         // Arrange
         var columnMetadata = new[]
         {
-            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false)
+            new DatabaseColumnMetadata("Column", SqlDbType.Int, typeof(int), IsNullable: false, IsIdentity: true, IsPrimaryKeyPart: false),
         };
 
         var databaseTableMetadata = new DatabaseTableMetadata("dbo", "Table", columnMetadata);
         var dataRows = new Dictionary<string, object?>[]
         {
-            new Dictionary<string, object?> {
-                { "Column", 1 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 1 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 2 }
+            new Dictionary<string, object?>
+            {
+                { "Column", 2 },
             },
-            new Dictionary<string, object?> {
-                { "Column", 3 }
-            }
+            new Dictionary<string, object?>
+            {
+                { "Column", 3 },
+            },
         };
         var buildingBlocks = new InsertQueryBuildingBlocks(databaseTableMetadata, dataRows);
 
@@ -248,9 +256,6 @@ public class InsertQueryBuildingBlocksExtensionsTests
             $"(2),{LF}" +
             $"(3);{LF}" +
             $"SET IDENTITY_INSERT [dbo].[Table] OFF;{LF}" +
-            $"GO{LF}"
-        );
+            $"GO{LF}");
     }
-
-    static readonly string LF = Environment.NewLine;
 }

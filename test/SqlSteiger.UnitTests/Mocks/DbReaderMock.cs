@@ -27,6 +27,7 @@ public class DbReaderMock : IDbDataReader
             {
                 return ordinal;
             }
+
             ordinal++;
         }
 
@@ -43,13 +44,19 @@ public class DbReaderMock : IDbDataReader
         return _columnData[_rowIndex][GetOrdinal(columnName)];
     }
 
-    public bool? GetBoolean(string columnName) =>
-        _columnData[_rowIndex][GetOrdinal(columnName)] is bool value ? value
-        : throw new InvalidDataException();
+    public bool? GetBoolean(string columnName)
+    {
+        return _columnData[_rowIndex][GetOrdinal(columnName)] is bool value
+            ? value
+            : throw new InvalidDataException();
+    }
 
-    public string? GetString(string columnName) =>
-        _columnData[_rowIndex][GetOrdinal(columnName)] is string value ? value
-        : throw new InvalidDataException();
+    public string? GetString(string columnName)
+    {
+        return _columnData[_rowIndex][GetOrdinal(columnName)] is string value
+            ? value
+            : throw new InvalidDataException();
+    }
 
     public bool IsDBNull(string columnName)
     {

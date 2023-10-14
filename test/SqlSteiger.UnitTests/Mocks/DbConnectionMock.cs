@@ -1,12 +1,10 @@
 ﻿namespace SqlSteiger.UnitTests.Mocks;
 
-using ForeignKeyMap = Dictionary<(string schema, string table, string column), (string schema, string table, string column)>;
-using TableMetadataMap = Dictionary<(string schema, string table), DatabaseTableMetadata>;
+using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
+using TableMetadataMap = Dictionary<(string Schema, string Table), DatabaseTableMetadata>;
 
 public class DbConnectionMock : IDbConnection
 {
-    public ForeignKeyMap ForeignKeyMap { get; }
-    public TableMetadataMap TableMetadataMap { get; }
     private readonly Dictionary<(string, string), IEnumerable<object?[]>> _tableData;
 
     public DbConnectionMock()
@@ -15,6 +13,10 @@ public class DbConnectionMock : IDbConnection
         TableMetadataMap = new TableMetadataMap();
         _tableData = new();
     }
+
+    public ForeignKeyMap ForeignKeyMap { get; }
+
+    public TableMetadataMap TableMetadataMap { get; }
 
     public void AddTable(DatabaseTableMetadata tableMetadata, IEnumerable<object?[]> dataRows)
     {
@@ -48,7 +50,7 @@ public class DbConnectionMock : IDbConnection
         return Task.CompletedTask;
     }
 
-    public void AddForeignKey((string schema, string table, string column) from, (string schema, string table, string column) to)
+    public void AddForeignKey((string Schema, string Table, string Column) from, (string Schema, string Table, string Column) to)
     {
         ForeignKeyMap.Add(from, to);
     }

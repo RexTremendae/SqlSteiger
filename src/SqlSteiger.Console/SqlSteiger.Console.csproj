@@ -9,6 +9,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../SqlSteiger.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
   <!-- This section is needed to enforce error on unnecessary using directives -->
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -20,4 +24,14 @@
     <ProjectReference Include="../SqlSteiger/SqlSteiger.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Menees.Analyzers" Version="[3.0.11]">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="[1.2.0-beta.507]">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
