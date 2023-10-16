@@ -2,6 +2,8 @@
 using SqlSteiger;
 using SqlSteiger.SqlDatabase;
 
+#pragma warning disable SA1122  // Use string.Empty for empty string
+
 var connectionBuilder = new SqlConnectionStringBuilder()
 {
     DataSource = "localhost",
@@ -11,13 +13,15 @@ var connectionBuilder = new SqlConnectionStringBuilder()
     InitialCatalog = "",
 
     // Seems to be needed when connecting to a local SQL Server instance running in docker
-    TrustServerCertificate = true
+    TrustServerCertificate = true,
 };
 
 var schema = "";
 var table = "";
 var keyColumn = "";
-var keyColumnValues = new object[] {};
+var keyColumnValues = new object[] { };
+
+#pragma warning restore SA1122
 
 await using IDbConnection connection = new SqlDbConnection(connectionBuilder.ToString());
 
@@ -38,7 +42,7 @@ var crawler = new DependencyCrawler(foreignKeyMap, tableMap);
 Informator.PrintTitle("Insert queries");
 foreach (var buildingBlocks in await crawler.GetInsertQueriesBuildingBlocksAsync(connection, schema, table, keyColumn, keyColumnValues))
 {
-    foreach(var query in buildingBlocks.CreateInsertQuery())
+    foreach (var query in buildingBlocks.CreateInsertQuery())
     {
         Console.WriteLine(query);
     }

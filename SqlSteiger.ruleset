@@ -13,8 +13,4 @@
     <Rule Id="SA1649" Action="None" /> <!-- SA1649: File name should match first type name -->
   </Rules>
 
-  <!-- Rules with ids on the form MENXXX - all rules fixed, but keep this here for future use to remember the AnalyzerId and RuleNamespace... -->
-  <Rules AnalyzerId="Menees.Analyzers" RuleNamespace="Menees.Analyzers">
-  </Rules>
-
 </RuleSet>
