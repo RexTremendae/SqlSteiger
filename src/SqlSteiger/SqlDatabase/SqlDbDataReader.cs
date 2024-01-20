@@ -2,14 +2,9 @@ namespace SqlSteiger.SqlDatabase;
 
 using Microsoft.Data.SqlClient;
 
-public class SqlDbDataReader : IDbDataReader
+public class SqlDbDataReader(SqlDataReader dbDataReader) : IDbDataReader
 {
-    private readonly SqlDataReader _dbDataReader;
-
-    public SqlDbDataReader(SqlDataReader dbDataReader)
-    {
-        _dbDataReader = dbDataReader;
-    }
+    private readonly SqlDataReader _dbDataReader = dbDataReader;
 
     public bool IsDBNull(string columnName)
     {

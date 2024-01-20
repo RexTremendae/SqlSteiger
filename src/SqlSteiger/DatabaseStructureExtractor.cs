@@ -3,14 +3,9 @@ namespace SqlSteiger;
 using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
 using TableMetadataMap = Dictionary<(string Schema, string Table), DatabaseTableMetadata>;
 
-public class DatabaseStructureExtractor
+public class DatabaseStructureExtractor(IDbConnection connection)
 {
-    private readonly IDbConnection _connection;
-
-    public DatabaseStructureExtractor(IDbConnection connection)
-    {
-        _connection = connection;
-    }
+    private readonly IDbConnection _connection = connection;
 
     public async Task<TableMetadataMap> ExtractTableMapAsync()
     {
@@ -70,7 +65,7 @@ public class DatabaseStructureExtractor
 
             if (!tables.TryGetValue((schemaName, tableName), out var columnList))
             {
-                columnList = new();
+                columnList = [];
                 tables.Add((schemaName, tableName), columnList);
             }
 
@@ -93,7 +88,7 @@ public class DatabaseStructureExtractor
 
         return tables.ToDictionary(
             key => (key.Key.Schema, key.Key.Table),
-            value => new DatabaseTableMetadata(Schema: $"{value.Key.Schema}", Name: $"{value.Key.Table}", Columns: value.Value.ToArray()));
+            value => new DatabaseTableMetadata(Schema: $"{value.Key.Schema}", Name: $"{value.Key.Table}", Columns: [.. value.Value]));
     }
 
     public async Task<ForeignKeyMap> ExtractForeignKeyMapAsync()

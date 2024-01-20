@@ -2,7 +2,7 @@ namespace SqlSteiger.FakeData;
 
 public class DataGenerator
 {
-    private static readonly Dictionary<Locale, IFakeDataGenerator> _dataGenerators = new();
+    private static readonly Dictionary<Locale, IFakeDataGenerator> _dataGenerators = [];
 
     public static IFakeDataGenerator GetDataGenerator(Locale locale)
     {

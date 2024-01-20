@@ -2,14 +2,9 @@ namespace SqlSteiger.SqlDatabase;
 
 using Microsoft.Data.SqlClient;
 
-public class SqlDbConnection : IDbConnection
+public class SqlDbConnection(string connectionString) : IDbConnection
 {
-    private readonly SqlConnection _sqlConnection;
-
-    public SqlDbConnection(string connectionString)
-    {
-        _sqlConnection = new SqlConnection(connectionString);
-    }
+    private readonly SqlConnection _sqlConnection = new(connectionString);
 
     public SqlDbConnection(SqlConnectionStringBuilder connectionStringBuilder)
         : this(connectionStringBuilder.ToString())

@@ -4,20 +4,12 @@ using System.Data;
 using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
 using TableMetadataMap = Dictionary<(string Schema, string Name), DatabaseTableMetadata>;
 
-public class DependencyCrawler
+public class DependencyCrawler(ForeignKeyMap foreignKeys, TableMetadataMap tables)
 {
-    private readonly TableMetadataMap _tables;
-    private readonly ForeignKeyMap _foreignKeys;
-    private readonly List<(string Schema, string Table, string KeyColumn, object KeyColumnValue)> _queue;
-    private readonly HashSet<(string Schema, string Table, string KeyColumn, object KeyColumnValue)> _visited;
-
-    public DependencyCrawler(ForeignKeyMap foreignKeys, TableMetadataMap tables)
-    {
-        _tables = tables;
-        _foreignKeys = foreignKeys;
-        _queue = new();
-        _visited = new();
-    }
+    private readonly TableMetadataMap _tables = tables;
+    private readonly ForeignKeyMap _foreignKeys = foreignKeys;
+    private readonly List<(string Schema, string Table, string KeyColumn, object KeyColumnValue)> _queue = [];
+    private readonly HashSet<(string Schema, string Table, string KeyColumn, object KeyColumnValue)> _visited = [];
 
     public async Task<IEnumerable<InsertQueryBuildingBlocks>> GetInsertQueriesBuildingBlocksAsync(
         IDbConnection connection,
@@ -113,7 +105,7 @@ public class DependencyCrawler
         {
             if (!tableRelations.TryGetValue((from.Schema, from.Table), out var toTables))
             {
-                toTables = new();
+                toTables = [];
                 tableRelations.Add((from.Schema, from.Table), toTables);
             }
 

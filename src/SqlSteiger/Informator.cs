@@ -72,7 +72,7 @@ public static class Informator
                     maxSize[i] = Math.Max(maxSize[i], dataRow[i]?.Length ?? NullMarker.Length);
                 }
 
-                data.Add(dataRow.ToArray());
+                data.Add([.. dataRow]);
             }
 
             if (maxColumnWidth.HasValue)
