@@ -1,6 +1,7 @@
 namespace SqlSteiger.Extensions;
 
 using System.Data;
+using System.Text;
 
 public static class StringExtensions
 {
@@ -21,5 +22,25 @@ public static class StringExtensions
                 ? parsedSqlDbType
                 : throw new InvalidOperationException($"No mapping found for type '{sqlDbType}'."),
         };
+    }
+
+    public static string ToKebabCase(this string input)
+    {
+        var builder = new StringBuilder();
+
+        foreach (var ch in input)
+        {
+            if (char.IsUpper(ch))
+            {
+                if (builder.Length > 0)
+                {
+                    builder.Append('-');
+                }
+            }
+
+            builder.Append(char.ToLower(ch));
+        }
+
+        return builder.ToString();
     }
 }
