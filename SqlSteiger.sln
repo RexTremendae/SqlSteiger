@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{445D4CD2-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.UnitTests", "test\SqlSteiger.UnitTests\SqlSteiger.UnitTests.csproj", "{1855DB54-3255-4050-895A-192C5E2FD2F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.Console", "src\SqlSteiger.Console\SqlSteiger.Console.csproj", "{3A148785-CB29-4645-A4C1-5D0ECBB05283}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.CLI", "src\SqlSteiger.CLI\SqlSteiger.CLI.csproj", "{3A148785-CB29-4645-A4C1-5D0ECBB05283}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.FakeData", "src\SqlSteiger.FakeData\SqlSteiger.FakeData.csproj", "{ED1D15D0-8A79-4412-9FB7-CBB61B3D10B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.Console.UnitTests", "test\SqlSteiger.Console.UnitTests\SqlSteiger.Console.UnitTests.csproj", "{50200797-11DB-46C1-A513-60135D6EC7A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.CLI.UnitTests", "test\SqlSteiger.CLI.UnitTests\SqlSteiger.CLI.UnitTests.csproj", "{50200797-11DB-46C1-A513-60135D6EC7A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSteiger.Test.Common", "test\SqlSteiger.Test.Common\SqlSteiger.Test.Common.csproj", "{CB2EF565-823B-4730-8753-FEB73EE918AF}"
 EndProject

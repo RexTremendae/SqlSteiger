@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>SqlSteiger.Console.UnitTests</RootNamespace>
+    <RootNamespace>SqlSteiger.CLI.UnitTests</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SqlSteiger.Test.Common\SqlSteiger.Test.Common.csproj" />
-    <ProjectReference Include="..\..\src\SqlSteiger.Console\SqlSteiger.Console.csproj" />
+    <ProjectReference Include="..\..\src\SqlSteiger.CLI\SqlSteiger.CLI.csproj" />
   </ItemGroup>
 
 </Project>

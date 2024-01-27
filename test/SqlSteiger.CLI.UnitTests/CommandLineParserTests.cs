@@ -1,6 +1,6 @@
-namespace SqlSteiger.Console.UnitTests;
+namespace SqlSteiger.CLI.UnitTests;
 
-using SqlSteiger.Console.CommandLine;
+using SqlSteiger.CLI.CommandLine;
 
 public class CommandLineParserTests
 {

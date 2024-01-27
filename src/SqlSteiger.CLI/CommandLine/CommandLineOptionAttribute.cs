@@ -1,4 +1,4 @@
-namespace SqlSteiger.Console.CommandLine;
+namespace SqlSteiger.CLI.CommandLine;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class CommandLineOptionAttribute(string longName = "", string shortName = "") : Attribute

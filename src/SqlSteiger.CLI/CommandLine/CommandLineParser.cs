@@ -1,4 +1,4 @@
-namespace SqlSteiger.Console.CommandLine;
+namespace SqlSteiger.CLI.CommandLine;
 
 using System.Reflection;
 
