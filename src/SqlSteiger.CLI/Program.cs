@@ -2,17 +2,38 @@
 
 using Microsoft.Data.SqlClient;
 using SqlSteiger;
+using SqlSteiger.CLI.CommandLine;
 using SqlSteiger.SqlDatabase;
 
 public static class Program
 {
-    public static async Task Main()
+    public static async Task Main(string[] args)
     {
-        Console.WriteLine();
-        Console.WriteLine("╔═══════════════════╗");
-        Console.WriteLine("║  SQL Steiger CLI  ║");
-        Console.WriteLine("╚═══════════════════╝");
-        Console.WriteLine();
+        var parseResult = CommandLineParser.Parse<ExecutionOptions>(args);
+
+        if (!parseResult.IsValid)
+        {
+            ColorWriter.WriteLine(parseResult.ErrorMessage, ConsoleColor.Red);
+            ColorWriter.WriteLine();
+            ColorWriter.WriteLine("Use --help to get a complete list of available options.");
+            ColorWriter.WriteLine();
+
+            return;
+        }
+
+        var options = parseResult.Options;
+
+        if (options.Help)
+        {
+            CommandLineInfo.PrintUsage<ExecutionOptions>(showLogo: !options.NoLogo);
+
+            return;
+        }
+
+        if (!options.NoLogo)
+        {
+            CommandLineInfo.PrintLogo();
+        }
 
         #pragma warning disable SA1122  // Use string.Empty for empty string
 

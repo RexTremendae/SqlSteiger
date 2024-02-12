@@ -4,18 +4,18 @@ using System.Reflection;
 
 public static class CommandLineParser
 {
-    public static T Parse<T>(string[] arguments)
+    public static CommandLineParserResult<T> Parse<T>(string[] arguments)
         where T : new()
     {
         var propertyNameMappings = GetPropertyNameMappings<T>();
-        var options = ExtractArguments<T>(arguments, propertyNameMappings);
+        var (options, isValid, errormessage) = ExtractArguments<T>(arguments, propertyNameMappings);
 
-        return options;
+        return new(options, isValid, errormessage);
     }
 
-    private static Dictionary<string, PropertyInfo> GetPropertyNameMappings<T>()
+    public static Dictionary<string, (CommandLineOptionAttribute Attribute, PropertyInfo PropertyInfo)> GetAllOptions<T>()
     {
-        var nameMappings = new Dictionary<string, PropertyInfo>();
+        var options = new Dictionary<string, (CommandLineOptionAttribute Attribute, PropertyInfo PropertyInfo)>();
 
         foreach (var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
@@ -31,23 +31,34 @@ public static class CommandLineParser
                 .ToLower();
             if (!string.IsNullOrWhiteSpace(longName))
             {
-                nameMappings.Add(longName, property);
+                options.Add(longName, (attribute, property));
             }
+        }
 
-            var shortName = (string.IsNullOrWhiteSpace(attribute.ShortName)
-                ? string.Empty
-                : attribute.ShortName)
-                .ToLower();
-            if (!string.IsNullOrWhiteSpace(shortName))
+        return options;
+    }
+
+    private static Dictionary<string, PropertyInfo> GetPropertyNameMappings<T>()
+    {
+        var nameMappings = new Dictionary<string, PropertyInfo>();
+
+        foreach (var (longName, (attribute, property)) in GetAllOptions<T>())
+        {
+            nameMappings.Add(longName, property);
+
+            foreach (var shortName in attribute.ShortNames.Select(_ => _.ToLower()))
             {
-                nameMappings.Add(shortName, property);
+                if (!string.IsNullOrWhiteSpace(shortName))
+                {
+                    nameMappings.Add(shortName, property);
+                }
             }
         }
 
         return nameMappings;
     }
 
-    private static T ExtractArguments<T>(string[] arguments, Dictionary<string, PropertyInfo> propertyNameMappings)
+    private static (T Options, bool IsValid, string ErrorMessage) ExtractArguments<T>(string[] arguments, Dictionary<string, PropertyInfo> propertyNameMappings)
         where T : new()
     {
         var options = new T();
@@ -68,7 +79,7 @@ public static class CommandLineParser
             {
                 if (currentProperty.Info != null)
                 {
-                    throw new InvalidOperationException($"Expected parameter value for option {currentProperty.ArgName}");
+                    return Error<T>($"Expected parameter value for option {currentProperty.ArgName}");
                 }
 
                 var argName = (arg.Length > 1 && arg[1] == '-')
@@ -77,12 +88,16 @@ public static class CommandLineParser
 
                 if (!propertyNameMappings.TryGetValue(argName, out var mappedProperty))
                 {
-                    throw new InvalidOperationException($"Invalid option: {arg}");
+                    return Error<T>($"Invalid option: {arg}");
                 }
 
                 if (mappedProperty.PropertyType == typeof(bool))
                 {
-                    SetValue(mappedProperty, options, string.Empty);
+                    if (!TrySetValue(mappedProperty, options, string.Empty, out var errorMessage))
+                    {
+                        return Error<T>(errorMessage);
+                    }
+
                     currentProperty = (null, string.Empty);
                 }
                 else
@@ -92,60 +107,83 @@ public static class CommandLineParser
             }
             else if (currentProperty.Info != null)
             {
-                SetValue(currentProperty.Info, options, arg);
+                if (!TrySetValue(currentProperty.Info, options, arg, out var errorMessage))
+                {
+                    return Error<T>(errorMessage);
+                }
+
                 currentProperty = (null, string.Empty);
             }
             else
             {
-                throw new InvalidOperationException($"Invalid option: {arg}");
+                return Error<T>($"Invalid option: {arg}");
             }
         }
 
         return currentProperty.Info != null
-            ? throw new InvalidOperationException($"Expected parameter value for option '{currentProperty.ArgName}'")
-            : options;
+            ? Error<T>($"Expected parameter value for option '{currentProperty.ArgName}'")
+            : Success(options);
     }
 
-    private static void SetValue<T>(PropertyInfo current, T options, string arg)
+    private static (T Options, bool IsValid, string ErrorMessage) Error<T>(string errorMessage)
+        where T : new()
     {
+        return (new(), false, errorMessage);
+    }
+
+    private static (T Options, bool IsValid, string ErrorMessage) Success<T>(T options)
+        where T : new()
+    {
+        return (options, true, string.Empty);
+    }
+
+    private static bool TrySetValue<T>(PropertyInfo current, T options, string arg, out string errorMessage)
+    {
+        errorMessage = string.Empty;
+
         switch (current.PropertyType)
         {
             case var type when type == typeof(bool):
             {
                 current.SetValue(options, true);
-                break;
+                return true;
             }
 
             case var type when type == typeof(int):
             {
                 if (!int.TryParse(arg, out var value))
                 {
-                    throw new InvalidOperationException($"Could not parse value as int: '{arg}'");
+                    errorMessage = $"Could not parse value as int: '{arg}'";
+                    return false;
                 }
 
                 current.SetValue(options, value);
-                break;
+                return true;
             }
 
             case var type when type == typeof(long):
             {
                 if (!long.TryParse(arg, out var value))
                 {
-                    throw new InvalidOperationException($"Could not parse value as int: '{arg}'");
+                    errorMessage = $"Could not parse value as int: '{arg}'";
+                    return false;
                 }
 
                 current.SetValue(options, value);
-                break;
+                return true;
             }
 
             case var type when type == typeof(string):
             {
                 current.SetValue(options, arg);
-                break;
+                return true;
             }
 
             default:
-                throw new InvalidOperationException($"Unsupported property value type: {current.PropertyType.Name}");
+            {
+                errorMessage = $"Unsupported property value type: {current.PropertyType.Name}";
+                return false;
+            }
         }
     }
 }

@@ -13,10 +13,10 @@ public class CommandLineParserTests
         })
         {
             // Act
-            var options = CommandLineParser.Parse<TestOptions>(args);
+            var result = CommandLineParser.Parse<TestOptions>(args);
 
             // Assert
-            options.Switch
+            result.Options.Switch
                 .Should().Be(true, because: "['" + string.Join("', '", args) + "']");
         }
     }
@@ -29,15 +29,17 @@ public class CommandLineParserTests
         foreach (var args in new string[][] {
             [ "--string-option-with-name", ExpectedValue ],
             [ $"--string-option-with-name={ExpectedValue}" ],
-            [ "-s", ExpectedValue ],
-            [ $"-s={ExpectedValue}" ]
+            [ "-s1", ExpectedValue ],
+            [ $"-s1={ExpectedValue}" ],
+            [ "-s2", ExpectedValue ],
+            [ $"-s2={ExpectedValue}" ]
         })
         {
             // Act
-            var options = CommandLineParser.Parse<TestOptions>(args);
+            var result = CommandLineParser.Parse<TestOptions>(args);
 
             // Assert
-            options.NamedStringOption
+            result.Options.NamedStringOption
                 .Should().Be(expected: ExpectedValue, because: "['" + string.Join("', '", args) + "']");
         }
     }
@@ -53,10 +55,10 @@ public class CommandLineParserTests
         })
         {
             // Act
-            var options = CommandLineParser.Parse<TestOptions>(args);
+            var result = CommandLineParser.Parse<TestOptions>(args);
 
             // Assert
-            options.NoNameStringOption
+            result.Options.NoNameStringOption
                 .Should().Be(expected: ExpectedValue, because: "['" + string.Join("', '", args) + "']");
         }
     }
@@ -72,10 +74,10 @@ public class CommandLineParserTests
         })
         {
             // Act
-            var options = CommandLineParser.Parse<TestOptions>(args);
+            var result = CommandLineParser.Parse<TestOptions>(args);
 
             // Assert
-            options.IntOption
+            result.Options.IntOption
                 .Should().Be(expected: ExpectedValue, because: "['" + string.Join("', '", args) + "']");
         }
     }
@@ -91,10 +93,10 @@ public class CommandLineParserTests
         })
         {
             // Act
-            var options = CommandLineParser.Parse<TestOptions>(args);
+            var result = CommandLineParser.Parse<TestOptions>(args);
 
             // Assert
-            options.LongOption
+            result.Options.LongOption
                 .Should().Be(expected: ExpectedValue, because: "['" + string.Join("', '", args) + "']");
         }
     }
@@ -103,42 +105,43 @@ public class CommandLineParserTests
     public void MixedOptionsTest()
     {
         // Arrange
-        var args = new[] { "--switch", "-s", "string value", "--int-option=13" };
+        var args = new[] { "--switch", "-s1", "string value", "--int-option=13" };
 
         // Act
-        var options = CommandLineParser.Parse<TestOptions>(args);
+        var result = CommandLineParser.Parse<TestOptions>(args);
 
         // Assert
-        options.Switch
+        result.Options.Switch
             .Should().BeTrue();
 
-        options.NamedStringOption
+        result.Options.NamedStringOption
             .Should().Be("string value");
 
-        options.NoNameStringOption
+        result.Options.NoNameStringOption
             .Should().BeEmpty();
 
-        options.IntOption
+        result.Options.IntOption
             .Should().Be(13);
 
-        options.LongOption
+        result.Options.LongOption
             .Should().Be(0);
     }
 
     [Theory]
-    [InlineData("-s -w")]
+    [InlineData("-s1 -w")]
     [InlineData("--string-option-with-name")]
     [InlineData("-w true")]
     [InlineData("--string-option-with-name s1 s2")]
-    [InlineData("-s -w --int-option")]
+    [InlineData("-s1 -w --int-option")]
     [InlineData("--undefined-option")]
     public void InvalidOptionsTest(string args)
     {
         // Act
-        var action = () => CommandLineParser.Parse<TestOptions>(args.Split(' '));
+        var result = CommandLineParser.Parse<TestOptions>(args.Split(' '));
 
         // Assert
-        action.Should().Throw<InvalidOperationException>();
+        result.IsValid.Should().BeFalse();
+        result.ErrorMessage.Should().NotBeEmpty();
     }
 }
 
@@ -147,7 +150,7 @@ public class TestOptions
     [CommandLineOption(shortName: "w")]
     public bool Switch { get; set; }
 
-    [CommandLineOption(longName: "string-option-with-name", shortName: "s")]
+    [CommandLineOption(longName: "string-option-with-name", shortNames: ["s1", "s2"])]
     public string NamedStringOption { get; set; } = string.Empty;
 
     [CommandLineOption()]

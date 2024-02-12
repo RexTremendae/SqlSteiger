@@ -1,10 +1,19 @@
 namespace SqlSteiger.CLI;
 
+using SqlSteiger.CLI.CommandLine;
+
 public class ExecutionOptions
 {
-    public bool IsValid { get; init; }
+    [CommandLineOption(
+        description: "Suppress logo output.")]
+    public bool NoLogo { get; init; }
 
-    public string ValidationMessage { get; init; } = string.Empty;
+    [CommandLineOption(
+        description: "Display full help.",
+        shortNames: ["h", "?"])]
+    public bool Help { get; init; }
 
+    [CommandLineOption(
+        description: "Set connection string to use for data extraction.")]
     public string? ConnectionString { get; init; }
 }
