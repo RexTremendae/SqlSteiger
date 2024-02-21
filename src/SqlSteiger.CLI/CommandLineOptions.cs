@@ -5,11 +5,13 @@ using SqlSteiger.CLI.CommandLine;
 public class CommandLineOptions
 {
     [CommandLineOption(
-        description: "Set connection string to use for data extraction.")]
+        description: "Set connection string to use for data extraction.",
+        parameterName: "connection string")]
     public string? ConnectionString { get; init; }
 
     [CommandLineOption(
-        description: "Specify json file that contains execution options.")]
+        description: "Specify JSON file that contains execution options.",
+        parameterName: "file path")]
     public string? ExecutionOptionsFile { get; init; }
 
     [CommandLineOption(

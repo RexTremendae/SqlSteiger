@@ -11,7 +11,7 @@ public static class CommandLineInfo
         var optionColumnMaxWidth = 0;
         var columnDistance = 4;
 
-        foreach (var (longName, (attribute, _)) in CommandLineParser.GetAllOptions<T>().OrderBy(_ => _.Key))
+        foreach (var (longName, (attribute, propertyInfo)) in CommandLineParser.GetAllOptions<T>().OrderBy(_ => _.Key))
         {
             var first = true;
             var builder = new StringBuilder();
@@ -33,6 +33,17 @@ public static class CommandLineInfo
             }
 
             builder.Append($"--{longName}");
+
+            if (propertyInfo.PropertyType != typeof(bool))
+            {
+                if (string.IsNullOrWhiteSpace(attribute.ParameterName))
+                {
+                    throw new InvalidOperationException($"Non-switch option is missing parameter name specification: {propertyInfo.Name}");
+                }
+
+                builder.Append($" <{attribute.ParameterName}>");
+            }
+
             var optionString = builder.ToString();
             columns.Add((optionString, attribute.Description));
             optionColumnMaxWidth = int.Max(optionColumnMaxWidth, optionString.Length);
