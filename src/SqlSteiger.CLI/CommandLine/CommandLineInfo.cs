@@ -4,14 +4,9 @@ using System.Text;
 
 public static class CommandLineInfo
 {
-    public static void PrintUsage<T>(bool showLogo)
+    public static void PrintUsage<T>()
         where T : new()
     {
-        if (showLogo)
-        {
-            PrintLogo();
-        }
-
         var columns = new List<(string Option, string Description)>();
         var optionColumnMaxWidth = 0;
         var columnDistance = 4;
@@ -72,6 +67,13 @@ public static class CommandLineInfo
         ColorWriter.Write(border, borderColor);
         ColorWriter.WriteLine("╝", borderColor);
 
+        ColorWriter.WriteLine();
+    }
+
+    public static void SuggestHelp()
+    {
+        ColorWriter.WriteLine();
+        ColorWriter.WriteLine("Use --help to get a complete list of available options.");
         ColorWriter.WriteLine();
     }
 }

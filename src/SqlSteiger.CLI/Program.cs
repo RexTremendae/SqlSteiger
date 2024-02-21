@@ -9,30 +9,20 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        var parseResult = CommandLineParser.Parse<ExecutionOptions>(args);
+        var parseResult = CommandLineParser.Parse<CommandLineOptions>(args);
 
-        if (!parseResult.IsValid)
-        {
-            ColorWriter.WriteLine(parseResult.ErrorMessage, ConsoleColor.Red);
-            ColorWriter.WriteLine();
-            ColorWriter.WriteLine("Use --help to get a complete list of available options.");
-            ColorWriter.WriteLine();
-
-            return;
-        }
-
-        var options = parseResult.Options;
-
-        if (options.Help)
-        {
-            CommandLineInfo.PrintUsage<ExecutionOptions>(showLogo: !options.NoLogo);
-
-            return;
-        }
-
-        if (!options.NoLogo)
+        if (!parseResult.Options.NoLogo)
         {
             CommandLineInfo.PrintLogo();
+        }
+
+        var executionOptionsBuilder = new ExecutionOptionsBuilder(new FileSystem());
+
+        var (isSuccess, executionOptions) = await executionOptionsBuilder.BuildAsync(parseResult);
+
+        if (!isSuccess)
+        {
+            return;
         }
 
         #pragma warning disable SA1122  // Use string.Empty for empty string
@@ -77,7 +67,7 @@ public static class Program
         {
             foreach (var query in buildingBlocks.CreateInsertQuery())
             {
-                Console.WriteLine(query);
+                ColorWriter.WriteLine(query);
             }
         }
     }
