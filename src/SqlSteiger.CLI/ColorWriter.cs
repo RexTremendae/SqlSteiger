@@ -1,4 +1,4 @@
-namespace SqlSteiger.CLI.CommandLine;
+namespace SqlSteiger.CLI;
 
 public static class ColorWriter
 {

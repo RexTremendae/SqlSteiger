@@ -1,26 +1,27 @@
-namespace SqlSteiger;
+namespace SqlSteiger.CLI;
 
-using static System.Console;
+using static SqlSteiger.CLI.ColorWriter;
 
 using ForeignKeyMap = Dictionary<(string Schema, string Table, string Column), (string Schema, string Table, string Column)>;
 
 public static class Informator
 {
+    private const string NullMarker = "<NULL>";
+
     private static readonly ConsoleColor FrameColor = ConsoleColor.White;
+    private static readonly ConsoleColor NullColor = ConsoleColor.DarkGray;
+    private static readonly ConsoleColor DataColor = ConsoleColor.Gray;
 
     public static void PrintTitle(string title)
     {
-        ForegroundColor = FrameColor;
-        WriteLine(string.Empty.PadLeft(title.Length + 6, '-'));
-        WriteLine($"-- {title} --");
-        WriteLine(string.Empty.PadLeft(title.Length + 6, '-'));
-        ResetColor();
+        WriteLine(string.Empty.PadLeft(title.Length + 6, '-'), FrameColor);
+        WriteLine($"-- {title} --", FrameColor);
+        WriteLine(string.Empty.PadLeft(title.Length + 6, '-'), FrameColor);
     }
 
     public static void PrintSubtitle(string subtitle)
     {
-        ForegroundColor = ConsoleColor.White;
-        WriteLine($"-- {subtitle} --");
+        WriteLine($"-- {subtitle} --", FrameColor);
     }
 
     public static void PrintTables(IEnumerable<DatabaseTableMetadata> tables)
@@ -39,11 +40,12 @@ public static class Informator
 
     public static void PrintRelations(ForeignKeyMap foreignKeys)
     {
-        ForegroundColor = FrameColor;
         PrintTitle("Relations");
         foreach (var (from, to) in foreignKeys)
         {
-            WriteLine($"{from.Schema}.{from.Table}.{from.Column} => {to.Schema}.{to.Table}.{to.Column}");
+            Write($"{from.Schema}.{from.Table}.{from.Column}");
+            Write(" => ", FrameColor);
+            WriteLine($"{to.Schema}.{to.Table}.{to.Column}");
         }
 
         WriteLine();
@@ -55,7 +57,6 @@ public static class Informator
         int? maxRows = null,
         int? maxColumnWidth = null)
     {
-        const string NullMarker = "<NULL>";
         foreach (var tbl in tables)
         {
             var data = new List<string?[]>(new[] { tbl.Columns.Select(c => c.Name).ToArray() });
@@ -84,48 +85,40 @@ public static class Informator
             }
 
             PrintSubtitle($"Data: {tbl.Schema}.{tbl.Name}");
-            ForegroundColor = ConsoleColor.White;
-            WriteLine(string.Empty.PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'));
+            WriteLine(
+                string.Empty.PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'),
+                FrameColor);
 
             var firstRow = true;
             foreach (var row in data)
             {
-                ForegroundColor = ConsoleColor.White;
-                Write("|");
-                ResetColor();
+                Write("|", FrameColor);
                 for (int i = 0; i < maxSize.Length; i++)
                 {
-                    if (row[i] == null)
-                    {
-                        ForegroundColor = ConsoleColor.DarkGray;
-                    }
-
                     var printableData = (row[i] ?? NullMarker).PadRight(maxSize[i]);
                     if (printableData.Length > maxSize[i])
                     {
                         printableData = printableData[..maxSize[i]];
                     }
 
-                    Write($" {printableData} ");
-                    ForegroundColor = ConsoleColor.White;
-                    Write("|");
-                    ResetColor();
+                    Write($" {printableData} ", row[i] == null ? NullColor : DataColor);
+                    Write("|", FrameColor);
                 }
 
                 WriteLine();
 
                 if (firstRow)
                 {
-                    ForegroundColor = ConsoleColor.White;
-                    WriteLine(string.Empty.PadLeft(maxSize.Sum() + (row.Length * 3) + 1, '-'));
+                    WriteLine(
+                        string.Empty.PadLeft(maxSize.Sum() + (row.Length * 3) + 1, '-'),
+                        FrameColor);
                     firstRow = false;
-                    ResetColor();
                 }
             }
 
-            ForegroundColor = ConsoleColor.White;
-            WriteLine(string.Empty.PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'));
-            ResetColor();
+            WriteLine(
+                string.Empty.PadLeft(maxSize.Sum() + (tbl.Columns.Length * 3) + 1, '-'),
+                FrameColor);
             WriteLine();
         }
     }
